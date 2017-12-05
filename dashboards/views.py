@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from django.shortcuts import render #, render_to_response
+from django.shortcuts import render, render_to_response
 from datetime import date
 import calendar
 
@@ -73,3 +73,5 @@ def charts2(request):
     context = manager.pstats()
     return render(request, 'views/charts2.html', context)
 
+def page404(request):
+    return  render_to_response('views/404.html')

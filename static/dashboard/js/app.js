@@ -7,7 +7,7 @@
   //required when $.ajaxLoad = true
   $.defaultPage = ''; //'main.html';
   $.subPagesDirectory = ''; //'views/';
-  $.page404 = 'views/404.html';
+  $.page404 = '/page404';
   $.mainContent = $('#ui-view');
 
   //Main navigation
