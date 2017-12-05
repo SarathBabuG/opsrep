@@ -1,0 +1,17 @@
+{% extends "decorator/skeleton.html" %}
+{% load static %}
+{% load bootstrap_ui_tags %}
+
+{% block body-leftmenu %}
+{% include "decorator/leftmenu.html" %}
+{% endblock %}
+
+{% block body-content %}
+		<ol class="breadcrumb">
+            <li class="breadcrumb-item">Home</li>
+        </ol>
+
+        <div class="container-fluid">
+            <div id="ui-view"></div>
+        </div>
+{% endblock %}

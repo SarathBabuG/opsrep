@@ -1,0 +1,86 @@
+{% load static %}
+{% load opsrep_utils %}
+{% load bootstrap_ui_tags %}
+
+<script>
+	//var requireJS = [];
+	//loadJS(requireJS, "{% static "dashboard/js/views/charts.js" %}");
+	
+	//jQuery.parseJSON
+	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
+	var options   = JSON.parse('{{ options | escapejs }}');
+	var labels    = JSON.parse('{{ labels | escapejs }}');
+
+	var ctx = null;
+	var chart = null;
+	for (var i = 0; i < dataset_array.length; i++) {
+		ctx = document.getElementById("canvas-"+(i+1));
+		chart = new Chart(ctx, {
+			
+		    type: "{{ chart_type }}",
+		    options: options,
+		    
+		    data: { labels: labels,  datasets: [ dataset_array[i]["dataset"] ] },
+		});
+	}
+
+</script>
+
+{{ data }}
+
+<div class="animated fadeIn">
+	
+	<div class="row">
+		<div class="form-group col-sm-2">
+			<select class="form-control" id="ccmonth">
+				{% for mm, mname in months.items %}
+				<option value={{ mm }} {% if mm == month %}selected="selected"{% endif %}>{{ mname }}</option>
+			    {% endfor %}
+			</select>
+		</div>
+		<div class="form-group col-sm-2">
+			<select class="form-control" id="ccyear">
+				{% for yy in years %}
+				<option value={{ yy }} {% if yy == year %}selected="selected"{% endif %}>{{ yy }}</option>
+			    {% endfor %}
+			</select>
+		</div>
+
+		<div class="form-actions">
+          <button class="btn btn-primary" type="button" onclick="loadPage2();">Go!</button>
+        </div>
+	</div>
+
+
+<!--  <div class="animated fadeIn"> -->
+<div class="card-columns cols-3">
+	{% for dset in data_sets|load_json %}
+	<div class="card">
+	<div class="card-header">
+		{{ dset.name }}
+		<div class="card-actions">
+			<a href="http://www.chartjs.org">
+	           <small class="text-muted">docs</small>
+	         </a>
+		</div>
+		<div class="card-body">
+	        <div class="chart-wrapper">
+	          <canvas id="canvas-{{ forloop.counter }}"></canvas>
+	        </div>
+	     </div>
+	</div>
+	</div>
+	{% endfor %}
+</div>
+</div>
+
+
+{% block body-javascript %}
+<script>
+function loadPage2(){
+	var ccmonth = document.getElementById("ccmonth").value;
+	var ccyear = document.getElementById("ccyear").value;
+	loadPage('/charts?year='+ccyear+'&month='+ccmonth);
+}
+</script>
+{% endblock %}

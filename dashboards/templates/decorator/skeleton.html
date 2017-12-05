@@ -1,0 +1,104 @@
+{% load static %}
+{% load bootstrap_ui_tags %}
+
+<!DOCTYPE html>
+<html lang="{% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% else %}en{% endif %}">
+
+<head>
+    <!-- This meta tag *must* come first in the head; any other head content must come *after* these tag -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block head-meta %}
+    {% include "decorator/header-meta.html" %}
+    {% endblock %}
+
+    <title>{% block head-title %} OpsRamp - DevOps Platform {% endblock %}</title>
+
+    {% block head-css %}
+    <!--  <link rel="stylesheet" href="{% static "dashboard/css/nav.css" %}">  -->
+    <link rel="stylesheet" href="{% static "dashboard/css/style.css" %}">
+    <link rel="stylesheet" href="{% static "dashboard/css/simple-line-icons.css" %}">
+    <link rel="stylesheet" href="{% static "dashboard/css/bootstrap.css" %}">
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" type="text/css">  -->
+
+    <!-- Font Awesome icon font -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    {% endblock %}
+
+</head>
+
+<!-- BODY options, add following classes to body to change options
+// Header options
+1. '.header-fixed'               - Fixed Header
+
+// Brand options
+1. '.brand-minimized'            - Minimized brand (Only symbol)
+
+// Sidebar options
+1. '.sidebar-fixed'              - Fixed Sidebar
+2. '.sidebar-hidden'             - Hidden Sidebar
+3. '.sidebar-off-canvas'         - Off Canvas Sidebar
+4. '.sidebar-minimized'          - Minimized Sidebar (Only icons)
+5. '.sidebar-compact'            - Compact Sidebar
+
+// Aside options
+1. '.aside-menu-fixed'           - Fixed Aside Menu
+2. '.aside-menu-hidden'          - Hidden Aside Menu
+3. '.aside-menu-off-canvas'      - Off Canvas Aside Menu
+
+// Breadcrumb options
+1. '.breadcrumb-fixed'           - Fixed Breadcrumb
+
+// Footer options
+1. '.footer-fixed'               - Fixed footer
+-->
+
+
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+    <!-- Block body header content -->
+    {% block body-header %}
+    {% include "decorator/header.html" %}
+    {% endblock %}
+
+
+    <div class="app-body">
+        <!-- Block body left menu content -->
+        {% block body-leftmenu %}{% endblock %}
+        
+        <main class="main">
+
+        <!-- Block breadcrumb content -->
+        <!-- Block body content -->
+        {% block body-content %}{% endblock %}
+
+        </main>
+
+        <!-- Block aside body content, if any -->
+        {% block aside-content %}{% endblock %}
+
+    </div>
+
+    {% block body-footer %}
+    {% include "decorator/footer.html" %}
+    {% endblock %}
+</body>
+
+
+
+<!-- Block body javascript -->
+{% block body-javascript %}
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static "commons/js/jquery.min.js" %}"></script>
+    <script src="{% static "dashboard/js/app.js" %}"></script>
+
+    <script src="{% static "dashboard/js/popper.min.js" %}"></script>
+    <script src="{% static "dashboard/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "dashboard/js/pace.min.js" %}"></script>
+    <script src="{% static "dashboard/js/Chart.min.js" %}"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+{% endblock %}
+
+</html>
