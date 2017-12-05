@@ -77,7 +77,7 @@ def product_stats(month=date.today().month, year=date.today().year):
 
 
 
-def pstats():
+def pod_rsrc_stats():
     last = 3
 
     months = dict((k, v) for k,v in enumerate(calendar.month_name))
