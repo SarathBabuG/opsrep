@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboards',
     'rest_framework',
-    'djangobower',
-    'django_nvd3',
-    'bootstrap_ui'
+    #'djangobower',
+    #'django_nvd3',
+    #'bootstrap_ui'
 ]
 
 MIDDLEWARE = [
@@ -129,7 +129,7 @@ STATIC_ROOT = '' #os.path.join(BASE_DIR, 'static')
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangobower.finders.BowerFinder',
+    #'djangobower.finders.BowerFinder',
 )
 
 STATICFILES_DIRS = [
