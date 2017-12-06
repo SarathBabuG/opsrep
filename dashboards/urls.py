@@ -20,8 +20,7 @@ from dashboards import views
 urlpatterns = [
     url(r'^$', views.main, name='main'),
 
-    url(r'^charts2', views.charts2, name='charts2'),
+    url(r'^dashboard', views.dashboard, name='dashboard'),
     url(r'^charts', views.charts, name='charts'),
     url(r'^page404', views.page404, name='page404'),
-    
 ]

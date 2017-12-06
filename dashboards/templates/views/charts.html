@@ -11,22 +11,20 @@
 	    fontColor: '#fff',
 	};
 	var labels    = JSON.parse('{{ labels | escapejs }}');
-
+	
 	var ctx = null;
 	var chart = null;
 // the plugin comes here
 	for (var i = 0; i < dataset_array.length; i++) {
 		ctx = document.getElementById("canvas-"+(i+1));
 		chart = new Chart(ctx, {
-			
 		    type: "{{ chart_type }}",
 		    options: options,
-
+      
 		    data: { labels: labels,  datasets: dataset_array[i]["dataset"] },
 		});
 	}
 </script>
-
 
 <!--  <div class="animated fadeIn"> -->
 <div class="card-columns cols-2">

@@ -7,31 +7,6 @@ import calendar
 from dashboards.ops import manager
 from .models import Stats
 
-colors_codes = {
-    'green'       : '#008000',
-    'olive'       : '#6B8E23',
-    'limegreen'   : '#32CD32',
-    'yellowgreen' : '#9ACD32',
-
-    'red'         : '#D55454',
-    'crimson'     : '#DC143C',
-    'salmon'      : '#FA8072',
-    'indianred'   : '#CD5C5C',
-    'lightcoral'  : '#F08080',
-    'tomato'      : '#FF6347',
-    
-    'blue'          : '#36A2EB',
-    'navy'          : '#000080',
-    'royalblue'     : '#4169E1',
-    'slateblue'     : '#6A5ACD',
-    'darkslateblue' : '#483D8B',
-    'steelblue'     : '#4682B4',
-    'cornflowerblue': '#6495ED',
-    
-    'yellow'      : '#FFCE56'
-
-}
-
 
 # Create your views here.
 def main(request):
@@ -41,7 +16,7 @@ def main(request):
     return render(request, 'main.html', context)
 
 
-def charts(request):
+def dashboard(request):
     formdata = request.GET.dict()
     month = int(formdata.get('month', date.today().month))
     year  = int(formdata.get('year', date.today().year))
@@ -65,13 +40,13 @@ def charts(request):
     context.update({'data': str(_hash) })
     
     context.update({'month': month, 'year': year, 'months': months, 'years': [2016, 2017]})
+    return render(request, 'views/dashboard.html', context)
+
+
+def charts(request):
+    context = manager.pod_rsrc_stats()
     return render(request, 'views/charts.html', context)
 
-
-
-def charts2(request):
-    context = manager.pstats()
-    return render(request, 'views/charts2.html', context)
 
 def page404(request):
     return  render_to_response('views/404.html')
