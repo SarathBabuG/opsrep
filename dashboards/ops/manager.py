@@ -53,9 +53,19 @@ def product_stats(month=date.today().month, year=date.today().year):
             data[stat.product][stat.class_code] = {states[stat.class_state]: stat.count}
 
     chart_type = "doughnut"
-    options    = {"responsive": True}
     labels     = ['Active', 'Inactive']
     datasets   = []
+    options    = {
+        "responsive" : True,
+        "pieceLabel" : {
+            "render"    : 'value',
+            "position"  : 'default',
+            "fontSize"  : 9,
+            "fontColor" : '#fff',
+            "fontStyle" : 'bold',
+            "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
+        }
+    }
     
     for product, product_data in data.items():
         for class_code, class_data in product_data.items():
@@ -88,10 +98,12 @@ def pod_rsrc_stats():
 
     sources    = ['msp', 'tenants', 'users']
     chart_type = "bar"
-    options    = {"responsive": True}
     datasets   = []
+    options    = {
+        "responsive" : True
+    }
+    
     products = ['ITOM', 'IMONSITE']
-
     for product in products:
         itom_stats = Stats.objects.filter(period__year=year, period__month__gt=(month-last), period__month__lt=(month+1), product__name=product).order_by('period__month')
     

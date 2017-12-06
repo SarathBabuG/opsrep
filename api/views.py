@@ -3,6 +3,7 @@ from dashboards.models import ProductStats
 
 from .serializers import ProductStatsSerializer
 
+
 # Create your views here.
 class ProductStatsViewSet(viewsets.ModelViewSet):
     queryset = ProductStats.objects.all()
