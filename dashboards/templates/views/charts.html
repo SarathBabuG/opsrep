@@ -2,11 +2,6 @@
 {% load opsrep_utils %}
 <script src="https://cdn.rawgit.com/emn178/Chart.PieceLabel.js/master/build/Chart.PieceLabel.min.js"></script>
 <script>
-	//var requireJS = [];
-	//loadJS(requireJS, "{% static "dashboard/js/views/charts.js" %}");
-	//loadJS(requireJS, "{% static 'dashboard/js/Chart.PieceLabel.js' %}");
-	
-	//jQuery.parseJSON
 	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
 	var options   = JSON.parse('{{ options | escapejs }}');
 	options['pieceLabel'] = {
@@ -26,7 +21,7 @@
 			
 		    type: "{{ chart_type }}",
 		    options: options,
-		    data: { labels: labels,  datasets: [ dataset_array[i]["dataset"] ] },
+		    data: { labels: labels,  datasets: dataset_array[i]["dataset"] },
 		});
 	}
 </script>
