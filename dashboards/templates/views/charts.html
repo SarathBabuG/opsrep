@@ -27,35 +27,8 @@
 	}
 </script>
 
-
-
-
-<div class="animated fadeIn">
-	
-	<div class="row">
-		<div class="form-group col-sm-2">
-			<select class="form-control" id="ccmonth">
-				{% for mm, mname in months.items %}
-				<option value={{ mm }} {% if mm == month %}selected="selected"{% endif %}>{{ mname }}</option>
-			    {% endfor %}
-			</select>
-		</div>
-		<div class="form-group col-sm-2">
-			<select class="form-control" id="ccyear">
-				{% for yy in years %}
-				<option value={{ yy }} {% if yy == year %}selected="selected"{% endif %}>{{ yy }}</option>
-			    {% endfor %}
-			</select>
-		</div>
-
-		<div class="form-actions">
-          <button class="btn btn-primary" type="button" onclick="loadPage2();">Go!</button>
-        </div>
-	</div>
-
-
 <!--  <div class="animated fadeIn"> -->
-<div class="card-columns cols-3">
+<div class="card-columns cols-2">
 	{% for dset in data_sets|load_json %}
 	<div class="card">
 	<div class="card-header">
@@ -75,13 +48,3 @@
 	{% endfor %}
 </div>
 </div>
-
-{% block body-javascript %}
-<script>
-function loadPage2(){
-	var ccmonth = document.getElementById("ccmonth").value;
-	var ccyear = document.getElementById("ccyear").value;
-	loadPage('/charts?year='+ccyear+'&month='+ccmonth);
-}
-</script>
-{% endblock %}
