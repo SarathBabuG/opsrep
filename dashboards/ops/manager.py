@@ -1,7 +1,7 @@
 from datetime import date
 import json, calendar
 
-from dashboards.models import ProductStats, Stats, Period
+from dashboards.models import ProductStats, Stats
 
 
 colors_codes = {
@@ -152,3 +152,18 @@ def pod_rsrc_stats():
 
     context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets))}
     return context
+
+
+def get_cn_agent_counts():
+    pod1_rc_cns = [
+        "cn01-rc.vistara.io",
+        "cn02-rc.vistara.io",
+        "cn03-rc.vistara.io",
+        "cn04-rc.vistara.io",
+        "cn05-rc.vistara.io",
+        "cn06-rc.vistara.io",
+        "cn07-rc.vistara.io",
+        "cn08-rc.vistara.io",
+        "cn09-rc.vistara.io",
+        "cn10-rc.vistara.io"
+    ]
