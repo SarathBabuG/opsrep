@@ -53,9 +53,9 @@ def product_stats(month=date.today().month, year=date.today().year):
             data[stat.product][stat.class_code] = {states[stat.class_state]: stat.count}
 
     chart_type = "doughnut"
-    options    = {"responsive": True}
-    labels     = ['Active', 'Inactive']
-    datasets   = []
+    options = {"responsive": True}
+    labels = ['Active', 'Inactive']
+    datasets = []
     
     for product, product_data in data.items():
         for class_code, class_data in product_data.items():

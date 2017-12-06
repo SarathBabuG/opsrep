@@ -39,9 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboards',
     'rest_framework',
-    #'djangobower',
-    #'django_nvd3',
-    #'bootstrap_ui'
 ]
 
 MIDDLEWARE = [

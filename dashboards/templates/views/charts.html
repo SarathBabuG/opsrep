@@ -1,29 +1,37 @@
 {% load static %}
 {% load opsrep_utils %}
-
+<script src="https://cdn.rawgit.com/emn178/Chart.PieceLabel.js/master/build/Chart.PieceLabel.min.js"></script>
 <script>
 	//var requireJS = [];
 	//loadJS(requireJS, "{% static "dashboard/js/views/charts.js" %}");
+	//loadJS(requireJS, "{% static 'dashboard/js/Chart.PieceLabel.js' %}");
 	
 	//jQuery.parseJSON
 	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
 	var options   = JSON.parse('{{ options | escapejs }}');
+	options['pieceLabel'] = {
+	    render: 'value',
+	    position: 'default',
+	    fontSize: 9,
+	    fontColor: '#fff',
+	};
 	var labels    = JSON.parse('{{ labels | escapejs }}');
 
 	var ctx = null;
 	var chart = null;
+// the plugin comes here
 	for (var i = 0; i < dataset_array.length; i++) {
 		ctx = document.getElementById("canvas-"+(i+1));
 		chart = new Chart(ctx, {
 			
 		    type: "{{ chart_type }}",
 		    options: options,
-		    
 		    data: { labels: labels,  datasets: [ dataset_array[i]["dataset"] ] },
 		});
 	}
-
 </script>
+
+
 
 
 <div class="animated fadeIn">
@@ -71,7 +79,6 @@
 	{% endfor %}
 </div>
 </div>
-
 
 {% block body-javascript %}
 <script>
