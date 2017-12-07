@@ -2,7 +2,7 @@ from datetime import date
 import json, calendar
 
 from dashboards.models import ProductStats, Stats
-
+from dashboards.ops.utils import http_request
 
 colors_codes = {
     'green'       : '#008000',
@@ -168,14 +168,23 @@ def pod_rsrc_stats():
 
 def get_cn_agent_counts():
     pod1_rc_cns = [
-        "cn01-rc.vistara.io",
-        "cn02-rc.vistara.io",
-        "cn03-rc.vistara.io",
-        "cn04-rc.vistara.io",
-        "cn05-rc.vistara.io",
-        "cn06-rc.vistara.io",
-        "cn07-rc.vistara.io",
-        "cn08-rc.vistara.io",
-        "cn09-rc.vistara.io",
-        "cn10-rc.vistara.io"
+        "cn01-2adc3.opsramp.com"
     ]
+    
+    bar_color = 'steelblue'
+    sessions_colors = {"agent": "#807dba", "gateway": "#e08214", "total": "#41ab5d"}
+    sessions_url = "https://%s:8443/stats"
+    sessions = {}
+    csplit = str.split
+
+    for cn in pod1_rc_cns:
+        cn_url = sessions_url % (cn)
+        response = http_request(cn_url).decode().split("<br>")
+        sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
+
+    return sessions
+        
+        
+        
+    
+    
