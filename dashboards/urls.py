@@ -24,3 +24,5 @@ urlpatterns = [
     url(r'^charts', views.charts, name='charts'),
     url(r'^page404', views.page404, name='page404'),
 ]
+
+import dashboards.ops.jobs

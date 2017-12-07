@@ -1,8 +1,10 @@
-from datetime import date
+from datetime import date, datetime
 import json, calendar
 
 from dashboards.models import ProductStats, Stats
 from dashboards.ops.utils import http_request
+from dashboards.ops.jobs import schedObj
+from dashboards.ops import properties
 
 colors_codes = {
     'green'       : '#008000',
@@ -162,10 +164,11 @@ def pod_rsrc_stats():
     
             })
 
-    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets))}
+    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets)), "statsObj": properties.statsObj}
     return context
 
 
+@schedObj.scheduled_job("interval", minutes=10, id="get_cn_agent_counts")
 def get_cn_agent_counts():
     pod1_rc_cns = [
         "cn01-2adc3.opsramp.com"
@@ -182,6 +185,7 @@ def get_cn_agent_counts():
         response = http_request(cn_url).decode().split("<br>")
         sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
 
+    properties.statsObj = {"2adc3": sessions, "time": str(datetime.now())}
     return sessions
         
         

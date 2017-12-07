@@ -16,11 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 
 from rest_framework import routers
-from api.views import ProductStatsViewSet
+from api.views import ProductStatsViewSet, StatsViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'product', ProductStatsViewSet)
+router.register(r'stats', StatsViewSet)
 
 
 urlpatterns = [

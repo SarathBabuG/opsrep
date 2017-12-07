@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'dashboards',
     'rest_framework',
+    'django_apscheduler',
     #'djangobower',
     #'django_nvd3',
     #'bootstrap_ui'
