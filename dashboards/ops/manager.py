@@ -171,7 +171,7 @@ def pod_rsrc_stats():
     
             })
 
-    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets))}
+    context = {'chart_type': chart_type, 'options': json.dumps(options), 'labels': json.dumps(labels), 'data_sets': json.dumps(datasets)}
     return context
 
 
