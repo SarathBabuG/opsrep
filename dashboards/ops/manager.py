@@ -178,21 +178,7 @@ def pod_rsrc_stats():
 @schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
     pod1_rc_cns = [
-        "cn01-rc.vistara.io",
-        "cn02-rc.vistara.io",
-        "cn03-rc.vistara.io",
-        "cn04-rc.vistara.io",
-        "cn05-rc.vistara.io",
-        "cn06-rc.vistara.io",
-        "cn07-rc.vistara.io",
-        "cn08-rc.vistara.io",
-        "cn09-rc.vistara.io",
-        "cn10-rc.vistara.io",
-        "cn11-rc.vistara.io",
-        "cn12-rc.vistara.io",
-        "cn13-rc.vistara.io",
-        "cn14-rc.vistara.io",
-        "cn15-rc.vistara.io"
+        "cn01-2adc3.opsramp.com"
     ]
     
     #bar_color = 'steelblue'
