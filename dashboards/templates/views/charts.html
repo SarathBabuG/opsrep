@@ -5,7 +5,13 @@
 	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
 	var options   = JSON.parse('{{ options | escapejs }}');
 	var labels    = JSON.parse('{{ labels | escapejs }}');
-	
+	/* options['pieceLabel'] = {
+		    render: 'value',
+		    position: 'default',
+		    fontSize: 9,
+		    fontColor: '#fff',
+		}; */
+
 	var ctx = null;
 	var chart = null;
 	for (var i = 0; i < dataset_array.length; i++) {
@@ -18,7 +24,6 @@
 		});
 	}
 </script>
-
 
 <!--  <div class="animated fadeIn"> -->
 <div class="card-columns cols-2">

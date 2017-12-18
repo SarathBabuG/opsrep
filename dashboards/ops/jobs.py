@@ -2,7 +2,7 @@ from django_apscheduler.jobstores import register_events, DjangoJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
-schedObj = BackgroundScheduler()
+schedObj = BackgroundScheduler({'daemon': True})
 schedObj.add_jobstore(DjangoJobStore(), 'default')
 
 if schedObj:

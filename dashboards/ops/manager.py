@@ -60,11 +60,11 @@ def product_stats(month=date.today().month, year=date.today().year):
     options    = {
         "responsive" : True,
         "pieceLabel" : {
-            "render"    : 'value',
-            "position"  : 'default',
+            "render"    : "value",
+            "position"  : "default",
             "fontSize"  : 9,
-            "fontColor" : '#fff',
-            "fontStyle" : 'bold',
+            "fontColor" : "#fff",
+            "fontStyle" : "bold",
             "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
         }
     }
@@ -102,7 +102,14 @@ def pod_rsrc_stats():
     chart_type = "bar"
     datasets   = []
     options    = {
-        "responsive" : True
+        "responsive" : True,
+        "pieceLabel" : {
+            "render"    : "value",
+            "position"  : "default",
+            "fontSize"  : 9,
+            "fontColor" : "#fff",
+            "fontStyle" : "bold",
+        }
     }
     
     products = ['ITOM', 'IMONSITE']
@@ -186,7 +193,7 @@ def get_cn_agent_counts():
         sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
 
     properties.statsObj = {"2adc3": sessions, "time": str(datetime.now())}
-    return sessions
+    #return sessions
         
         
         
