@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import json, calendar
 
 from dashboards.models import ProductStats, Stats
@@ -171,31 +171,42 @@ def pod_rsrc_stats():
     
             })
 
-    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets)), "statsObj": properties.statsObj}
+    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets))}
     return context
 
 
-@schedObj.scheduled_job("interval", minutes=10, id="get_cn_agent_counts")
+@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
     pod1_rc_cns = [
-        "cn01-2adc3.opsramp.com"
+        "cn01-rc.vistara.io",
+        "cn02-rc.vistara.io",
+        "cn03-rc.vistara.io",
+        "cn04-rc.vistara.io",
+        "cn05-rc.vistara.io",
+        "cn06-rc.vistara.io",
+        "cn07-rc.vistara.io",
+        "cn08-rc.vistara.io",
+        "cn09-rc.vistara.io",
+        "cn10-rc.vistara.io",
+        "cn11-rc.vistara.io",
+        "cn12-rc.vistara.io",
+        "cn13-rc.vistara.io",
+        "cn14-rc.vistara.io",
+        "cn15-rc.vistara.io"
     ]
     
-    bar_color = 'steelblue'
-    sessions_colors = {"agent": "#807dba", "gateway": "#e08214", "total": "#41ab5d"}
+    #bar_color = 'steelblue'
+    #sessions_colors = {"agent": "#807dba", "gateway": "#e08214", "total": "#41ab5d"}
     sessions_url = "https://%s:8443/stats"
     sessions = {}
     csplit = str.split
 
     for cn in pod1_rc_cns:
         cn_url = sessions_url % (cn)
+        print(cn_url)
         response = http_request(cn_url).decode().split("<br>")
         sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
 
-    properties.statsObj = {"2adc3": sessions, "time": str(datetime.now())}
+    properties.statsObj = {"1arc": sessions, "time": str(datetime.now())}
     #return sessions
-        
-        
-        
-    
-    
+

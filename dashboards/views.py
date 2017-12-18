@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 from django.shortcuts import render, render_to_response
+#from django.utils.safestring import mark_safe
+#from django.utils.html import escapejs
 from datetime import date
-import calendar
+import json, calendar
 
-from dashboards.ops import manager
+from dashboards.ops import manager, properties
 from .models import Stats
 
 
@@ -50,3 +52,31 @@ def charts(request):
 
 def page404(request):
     return  render_to_response('views/404.html')
+
+
+def cnsessions(request):
+    '''
+    var fData=[
+        {State:'AL',freq:{agent:4786, gateway:249}}
+        ,{State:'AZ',freq:{agent:1101, gateway:674}}
+        ,{State:'CT',freq:{agent:932, gateway:418}}
+        ,{State:'DE',freq:{agent:832, gateway:1862}}
+        ,{State:'FL',freq:{agent:4481, gateway:948}}
+        ,{State:'GA',freq:{agent:1619, gateway:1063}}
+        ,{State:'IA',freq:{agent:1819, gateway:1203}}
+        ,{State:'IL',freq:{agent:4498, gateway:942}}
+        ,{State:'IN',freq:{agent:797, gateway:1534}}
+        ,{State:'KS',freq:{agent:162, gateway:471}}
+        ];
+    '''
+    cdata = []
+    for cn, cn_data in properties.statsObj.get('1arc', {}).items():
+        cdata.append({
+            "csnode"   : cn.split("-")[0],
+            "sessions" : {
+                "agent"   : int(cn_data["Agent"]),
+                "gateway" : int(cn_data["Gateway"])
+            }
+        })
+
+    return  render(request, 'views/cnsessions.html', { "csn_sessions": cdata })
