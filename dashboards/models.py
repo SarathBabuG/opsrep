@@ -52,28 +52,6 @@ SQLite: SELECT strftime('%s','now');
 
 curr_year = int(time.strftime('%Y'))
 '''
-class ProductStats(models.Model):
-    """
-    This class consists of only two states
-    The number containing active and inactive users
-    """
-    
-    months_array = list((k, v) for k,v in enumerate(calendar.month_name))
-    product = models.CharField(max_length=10, choices=[('itom', 'ITOM'), ('imlink', 'IMONSITE')])
-    class_code = models.CharField(max_length=10, choices=[('msp', 'Service Providers'), ('tenants', 'Tenants'), ('users', 'Users')])
-    class_state = models.IntegerField(choices=[(1, 'Active'), (0, 'De-active')])
-    month = models.IntegerField(choices=months_array)
-    year = models.IntegerField(default=timezone.now().year)
-    count = models.IntegerField()
-    created_date = models.DateTimeField(default=timezone.now)
-    
-    class Meta:
-        db_table = "product_statistics"
-    
-    def __str__(self):
-        return "product: {}, class_code: {}, state: {}, month: {}, year: {}, count: {}".format(self.product.__str__(), self.class_code.__str__(), self.class_state.__str__(), self.month.__str__(), self.year.__str__(), self.count.__str__())
-
-
 class Period(models.Model):
     months_array = list((k, v) for k,v in enumerate(calendar.month_name))
     del months_array[0]

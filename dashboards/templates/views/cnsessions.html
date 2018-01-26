@@ -50,7 +50,7 @@ function dashboard(id, fData) {
     // function to handle histogram.
     function histoGram(fD){
         var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
-        hGDim.w = 650 - hGDim.l - hGDim.r, 
+        hGDim.w = 500 - hGDim.l - hGDim.r, 
         hGDim.h = 300 - hGDim.t - hGDim.b;
             
         //create svg for histogram.
@@ -133,7 +133,7 @@ function dashboard(id, fData) {
     
     // function to handle pieChart.
     function pieChart(pD){
-        var pC ={},    pieDim ={w:200, h: 200};
+        var pC ={},    pieDim ={w:250, h: 250};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
                 
         // create svg for pie chart.
@@ -239,8 +239,9 @@ function dashboard(id, fData) {
 }
 </script>
 
-
+{% for csn_sessions in csn_sessions_data %}
 <script>
-var freqData = {{ csn_sessions | to_json }};
-dashboard('#ui-view', freqData);
+	var freqData = {{ csn_sessions | to_json }};
+	dashboard('#ui-view', freqData);
 </script>
+{% endfor %}

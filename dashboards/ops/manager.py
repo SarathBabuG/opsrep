@@ -1,10 +1,12 @@
 from datetime import date, datetime, timedelta
 import json, calendar
 
-from dashboards.models import ProductStats, Stats
+from dashboards.models import Stats
 from dashboards.ops.utils import http_request
 from dashboards.ops.jobs import schedObj
 from dashboards.ops import properties
+
+from dashboards.ops.connection import DBCmd, executeQuery, SQL
 
 colors_codes = {
     'green'       : '#008000',
@@ -32,31 +34,10 @@ colors_codes = {
 }
 
 
-def product_stats(month=date.today().month, year=date.today().year):
-    '''
-    allstats = ProductStats.objects.all()
-    active = stats.filter(month=date.today().month, year=date.today().year, product='itom', class_state=1).values('class_code','count')
-    deactive = stats.filter(month=date.today().month, year=date.today().year, product='itom', class_state=0).values('class_code','count')
-    '''
-
-    stats = ProductStats.objects.filter(month=month, year=year).order_by('product')
-    states = {0: 'Active', 1: 'Inactive'}
-    data = {}
-    for stat in stats:
-        if stat.product not in data:
-            data[stat.product] = {}
-
-        if stat.class_code not in data[stat.product]:
-            data[stat.product][stat.class_code] = {}
-
-        try:
-            data[stat.product][stat.class_code].update({states[stat.class_state]: stat.count})
-        except:
-            data[stat.product][stat.class_code] = {states[stat.class_state]: stat.count}
-
+def pod_rsrc_stats_doughnut(month=date.today().month, year=date.today().year):
     chart_type = "doughnut"
-    labels     = ['Active', 'Inactive']
     datasets   = []
+    labels     = ['Active', 'Inactive']
     options    = {
         "responsive" : True,
         "pieceLabel" : {
@@ -68,31 +49,37 @@ def product_stats(month=date.today().month, year=date.today().year):
             "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
         }
     }
+
+    colors   = [colors_codes['olive'], colors_codes['red']]
+    products = ['ITOM', 'IMONSITE']
+    for product in products:
+        itom_stats = Stats.objects.filter(period__year=year, period__month=month, product__name=product)
     
-    for product, product_data in data.items():
-        for class_code, class_data in product_data.items():
-            dashboard = product + ' - ' + class_code
-            colors    = [colors_codes['olive'], colors_codes['red']]
-            values    = [class_data['Active'], class_data['Inactive']]
+        product_hash = {}
+        for _stat in itom_stats:
+            src = _stat.source.name
+            product_hash[src] = {'active': _stat.active, 'inactive': _stat.inactive}
+
+            dashboard = product + ' - ' + src
             datasets.append({
                 'name': dashboard,
                 'dataset': {
                     'label': dashboard,
-                    'data': values,
+                    'data': [_stat.active, _stat.inactive],
                     'backgroundColor': colors,
                     'hoverBackgroundColor': colors
                 }
             })
-    
-    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets)), 'dsets': datasets}
+ 
+    context = {'chart_type': chart_type, 'options': str(json.dumps(options)), 'labels': str(json.dumps(labels)), 'data_sets': str(json.dumps(datasets))}
     return context
 
 
 
-def pod_rsrc_stats():
+def pod_rsrc_stats_pie():
     last = 3
 
-    months = dict((k, v) for k,v in enumerate(calendar.month_name))
+    months = dict((k, v) for k,v in enumerate(calendar.month_abbr))
     del months[0]
     
     month = date.today().month
@@ -108,18 +95,25 @@ def pod_rsrc_stats():
             "position"  : "default",
             "fontSize"  : 9,
             "fontColor" : "#fff",
-            "fontStyle" : "bold",
+            "fontStyle" : "bold"
         }
     }
     
     products = ['ITOM', 'IMONSITE']
     for product in products:
+        
         itom_stats = Stats.objects.filter(period__year=year, period__month__gt=(month-last), period__month__lt=(month+1), product__name=product).order_by('period__month')
-    
+        if month < last:
+            prev_year   = year - 1
+            prev_months = last - (month % last)
+            py_itom_stats = Stats.objects.filter(period__year=prev_year, period__month__gt=(12-prev_months), period__month__lt=(12+1), product__name=product).order_by('period__month')
+            cy_itom_stats = Stats.objects.filter(period__year=year, period__month__gt=(month-(month % last)), period__month__lt=(month+1), product__name=product).order_by('period__month')
+            itom_stats = (list(py_itom_stats) + list(cy_itom_stats))
+
         product_hash = {}
         distinct_months = set()
         for _stat in itom_stats:
-            distinct_months.add(_stat.period.month)
+            distinct_months.add(months[_stat.period.month])
             if _stat.source.name not in product_hash:
                 product_hash[_stat.source.name] = {'active': [], 'inactive': []}
     
@@ -141,14 +135,12 @@ def pod_rsrc_stats():
         }
         """
     
-        labels = []
-        for i in distinct_months:
-            labels.append(months[i])
-    
-        
+        labels = list(distinct_months)
         for src in sources:
-            dashboard = product + ' - ' + src
-    
+            if src not in product_hash:
+                continue
+
+            dashboard       = product + ' - ' + src
             active_values   = product_hash[src]['active']
             inactive_values = product_hash[src]['inactive']
             datasets.append({
@@ -178,11 +170,28 @@ def pod_rsrc_stats():
 @schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
     pod1_rc_cns = [
-        "cn01-2adc3.opsramp.com"
+        "cn01-rc.vistara.io",
+        "cn02-rc.vistara.io",
+        "cn03-rc.vistara.io",
+        "cn04-rc.vistara.io",
+        "cn05-rc.vistara.io",
+        "cn06-rc.vistara.io",
+        "cn07-rc.vistara.io",
+        "cn08-rc.vistara.io",
+        "cn09-rc.vistara.io",
+        "cn10-rc.vistara.io",
+        "cn11-rc.vistara.io",
+        "cn12-rc.vistara.io",
+        "cn13-rc.vistara.io",
+        "cn14-rc.vistara.io",
+        "cn15-rc.vistara.io",
+        "cn16-rc.vistara.io",
+        "cn17-rc.vistara.io",
+        "cn18-rc.vistara.io",
+        "cn19-rc.vistara.io",
+        "cn20-rc.vistara.io"
     ]
     
-    #bar_color = 'steelblue'
-    #sessions_colors = {"agent": "#807dba", "gateway": "#e08214", "total": "#41ab5d"}
     sessions_url = "https://%s:8443/stats"
     sessions = {}
     csplit = str.split
@@ -194,5 +203,3 @@ def get_cn_agent_counts():
         sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
 
     properties.statsObj = {"1arc": sessions, "time": str(datetime.now())}
-    #return sessions
-

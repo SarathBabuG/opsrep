@@ -4,7 +4,7 @@ from django.shortcuts import render, render_to_response
 #from django.utils.safestring import mark_safe
 #from django.utils.html import escapejs
 from datetime import date
-import json, calendar
+import calendar
 
 from dashboards.ops import manager, properties
 from .models import Stats
@@ -14,7 +14,7 @@ from .models import Stats
 def main(request):
     months = dict((k, v) for k,v in enumerate(calendar.month_name))
     del months[0]
-    context = manager.product_stats()
+    context = manager.pod_rsrc_stats_doughnut()
     return render(request, 'main.html', context)
 
 
@@ -22,12 +22,12 @@ def dashboard(request):
     formdata = request.GET.dict()
     month = int(formdata.get('month', date.today().month))
     year  = int(formdata.get('year', date.today().year))
-
+ 
     months = dict((k, v) for k,v in enumerate(calendar.month_name))
     del months[0]
-
-    context = manager.product_stats(month, year)
-
+ 
+    context = manager.pod_rsrc_stats_doughnut(month, year)
+ 
     data = Stats.objects.filter(period__year=2017, period__month__gt=(12-3), product__name='ITOM')
     _hash = []
     for d in data:
@@ -38,15 +38,14 @@ def dashboard(request):
             'active' : d.active,
             'inactive' : d.inactive,
         })
-    
+     
     context.update({'data': str(_hash) })
-    
-    context.update({'month': month, 'year': year, 'months': months, 'years': [2016, 2017]})
+    context.update({'month': month, 'year': year, 'months': months, 'years': [2016, 2017, 2018]})
     return render(request, 'views/dashboard.html', context)
 
 
 def charts(request):
-    context = manager.pod_rsrc_stats()
+    context = manager.pod_rsrc_stats_pie()
     return render(request, 'views/charts.html', context)
 
 
@@ -69,7 +68,9 @@ def cnsessions(request):
         ,{State:'KS',freq:{agent:162, gateway:471}}
         ];
     '''
-    cdata = []
+    boards = []
+    cdata  = []
+    count  = 0
     for cn, cn_data in properties.statsObj.get('1arc', {}).items():
         cdata.append({
             "csnode"   : cn.split("-")[0],
@@ -78,5 +79,13 @@ def cnsessions(request):
                 "gateway" : int(cn_data["Gateway"])
             }
         })
+        count += 1
+        if count == 10:
+            count = 0
+            boards.append(cdata)
+            cdata = []
 
-    return  render(request, 'views/cnsessions.html', { "csn_sessions": cdata })
+    if cdata:
+        boards.append(cdata)
+
+    return  render(request, 'views/cnsessions.html', { "csn_sessions_data": boards, "agents_data": properties.statsObj.get('1arc', {}) })

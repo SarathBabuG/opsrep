@@ -1,15 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from dashboards.models import ProductStats, Stats
+from dashboards.models import Stats
 from dashboards.ops import properties
 
-from .serializers import ProductStatsSerializer, StatsSerializer
-
-
-# Create your views here.
-class ProductStatsViewSet(viewsets.ModelViewSet):
-    queryset = ProductStats.objects.all()
-    serializer_class = ProductStatsSerializer
+from .serializers import StatsSerializer
 
 
 class StatsViewSet(viewsets.ModelViewSet):

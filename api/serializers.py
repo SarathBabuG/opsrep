@@ -1,10 +1,5 @@
 from rest_framework import serializers
-from dashboards.models import ProductStats, Stats
-
-class ProductStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductStats
-        fields = ('product', 'class_code', 'class_state', 'count', 'month', 'year')
+from dashboards.models import Stats
 
 class StatsSerializer(serializers.ModelSerializer):
     product = serializers.CharField(source='product.name')

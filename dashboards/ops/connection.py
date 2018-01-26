@@ -50,8 +50,9 @@ config = {
 
 
 class DBCmd:
-    def __init__(self, cmd, params=[]):
+    def __init__(self, cmd, query=None, params=()):
         self.cmd = cmd
+        self.query = query
         self.params = params
 
 
@@ -89,7 +90,8 @@ class DBWrapper(Thread):
                     # cmdObj.params is a list to bundle statements into a "transaction"
                     try:
                         # For (query, params) in cmdObj.params:
-                        (query, params) = cmdObj.params[0]
+                        query  = cmdObj.query
+                        params = cmdObj.params
                         self.cur.execute(query, params)
                         res.append(self.cur.rowcount)
                         res.append(self.cur.fetchall())
@@ -191,3 +193,9 @@ def executeQuery(cmdObj):
     except:
         raise
 
+
+''' Sample querying '''
+'''
+query = "select * from agent_patch_info;"
+rows  = executeQuery( DBCmd(SQL, query) )[1]
+'''
