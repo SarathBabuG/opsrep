@@ -111,9 +111,11 @@ def pod_rsrc_stats_pie():
             itom_stats = (list(py_itom_stats) + list(cy_itom_stats))
 
         product_hash = {}
-        distinct_months = set()
+        labels = []
         for _stat in itom_stats:
-            distinct_months.add(months[_stat.period.month])
+            if months[_stat.period.month] not in labels:
+                labels.append(months[_stat.period.month])
+
             if _stat.source.name not in product_hash:
                 product_hash[_stat.source.name] = {'active': [], 'inactive': []}
     
@@ -134,8 +136,7 @@ def pod_rsrc_stats_pie():
             
         }
         """
-    
-        labels = list(distinct_months)
+
         for src in sources:
             if src not in product_hash:
                 continue
