@@ -47,6 +47,14 @@ def pod_rsrc_stats_doughnut(month=date.today().month, year=date.today().year):
             "fontColor" : "#fff",
             "fontStyle" : "bold",
             "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
+        },
+        "title": {
+            "display": True,
+            "position": 'left',
+        },
+        "legend": {
+            "position": 'bottom',
+            "labels": {"boxWidth": 20}
         }
     }
 
@@ -168,7 +176,7 @@ def pod_rsrc_stats_pie():
     return context
 
 
-@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
+#@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
     pod1_rc_cns = [
         "cn01-rc.vistara.io",

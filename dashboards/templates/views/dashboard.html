@@ -13,9 +13,10 @@
 	var ctx = null;
 	var chart = null;
 	for (var i = 0; i < dataset_array.length; i++) {
+		options['title']['text'] = dataset_array[i]["name"];
+
 		ctx = document.getElementById("canvas-"+(i+1));
 		chart = new Chart(ctx, {
-			
 		    type: "{{ chart_type }}",
 		    options: options,
 		    
@@ -50,26 +51,17 @@
 	</div>
 
 
-<!--  <div class="animated fadeIn"> -->
-<div class="card-columns cols-3">
+	<!--  <div class="animated fadeIn"> -->
+	<div class="card-columns cols-3">
 	{% for dset in data_sets|load_json %}
 	<div class="card">
-	<div class="card-header">
-		{{ dset.name }}
-		<div class="card-actions">
-			<a href="http://www.chartjs.org">
-	           <small class="text-muted">docs</small>
-	         </a>
-		</div>
-		<div class="card-body">
-	        <div class="chart-wrapper">
-	          <canvas id="canvas-{{ forloop.counter }}"></canvas>
-	        </div>
-	     </div>
-	</div>
-	</div>
+		<div class="chart-wrapper">
+        <canvas id="canvas-{{ forloop.counter }}"></canvas>
+        </div>
+    </div>
 	{% endfor %}
-</div>
+	</div>
+
 </div>
 
 
