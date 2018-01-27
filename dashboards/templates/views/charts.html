@@ -5,28 +5,9 @@
 	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
 	var options   = JSON.parse('{{ options | escapejs }}');
 	var labels    = JSON.parse('{{ labels | escapejs }}');
-	/* options['pieceLabel'] = {
-		    render: 'value',
-		    position: 'default',
-		    fontSize: 9,
-		    fontColor: '#fff',
-		}; */
-
-	var ctx = null;
-	var chart = null;
-	for (var i = 0; i < dataset_array.length; i++) {
-		ctx = document.getElementById("canvas-"+(i+1));
-		chart = new Chart(ctx, {
-		    type: "{{ chart_type }}",
-		    options: options,
-		    
-		    data: { labels: labels,  datasets: dataset_array[i]["dataset"] },
-		});
-	}
-	
-	// Define a plugin to provide data labels
-    Chart.plugins.register({
-        afterDatasetsDraw: function(chart, easing) {
+	var plugin = {
+    		id: 'p1',
+    		afterDatasetDraw: function(chart, easing) {
             // To only draw at the end of animation, check for easing === 1
             var ctx = chart.ctx;
 
@@ -37,7 +18,7 @@
                         // Draw the text in black, with the specified font
                         ctx.fillStyle = 'rgb(0, 0, 0)';
 
-                        var fontSize = 12;
+                        var fontSize = 11;
                         var fontStyle = 'normal';
                         var fontFamily = 'Helvetica Neue';
                         ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
@@ -56,7 +37,23 @@
                 }
             });
         }
-    });
+    }
+
+	var ctx = null;
+	var chart = null;
+	for (var i = 0; i < dataset_array.length; i++) {
+		ctx = document.getElementById("canvas-"+(i+1));
+		chart = new Chart(ctx, {
+		    type: "{{ chart_type }}",
+		    options: options,
+		    plugins: [plugin],
+		    
+		    data: { labels: labels,  datasets: dataset_array[i]["dataset"] },
+		});
+	}
+	
+	// Define a plugin to provide data labels
+    //Chart.plugins.register(plugin);
 
 </script>
 

@@ -17,6 +17,11 @@
 
 		ctx = document.getElementById("canvas-"+(i+1));
 		chart = new Chart(ctx, {
+			config: {
+		        plugins: {
+		            p1: false   // disable cancellable plugins using id for this instance
+		        }
+		    },
 		    type: "{{ chart_type }}",
 		    options: options,
 		    

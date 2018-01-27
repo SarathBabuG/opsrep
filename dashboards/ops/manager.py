@@ -40,14 +40,6 @@ def pod_rsrc_stats_doughnut(month=date.today().month, year=date.today().year):
     labels     = ['Active', 'Inactive']
     options    = {
         "responsive" : True,
-        "pieceLabel" : {
-            "render"    : "value",
-            "position"  : "default",
-            "fontSize"  : 9,
-            "fontColor" : "#fff",
-            "fontStyle" : "bold",
-            "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
-        },
         "title": {
             "display": True,
             "position": 'left',
@@ -57,6 +49,16 @@ def pod_rsrc_stats_doughnut(month=date.today().month, year=date.today().year):
             "labels": {"boxWidth": 20}
         }
     }
+    options.update({
+        "pieceLabel" : {
+            "render"    : "value",
+            "position"  : "default",
+            "fontSize"  : 9,
+            "fontColor" : "#fff",
+            "fontStyle" : "bold",
+            "fontFamily": "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
+        }
+    })
 
     colors   = [colors_codes['olive'], colors_codes['red']]
     products = ['ITOM', 'IMONSITE']
@@ -98,12 +100,9 @@ def pod_rsrc_stats_pie():
     datasets   = []
     options    = {
         "responsive" : True,
-        "pieceLabel" : {
-            "render"    : "value",
-            "position"  : "default",
-            "fontSize"  : 9,
-            "fontColor" : "#fff",
-            "fontStyle" : "bold"
+        "legend": {
+            "position": 'bottom',
+            "labels": {"boxWidth": 20}
         }
     }
     
