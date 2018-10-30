@@ -12,7 +12,9 @@
 '''
 from django_apscheduler.jobstores import register_events, DjangoJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
-
+from apscheduler.triggers.interval import IntervalTrigger
+from datetime import datetime, timedelta
+from dashboards.ops.manager import get_cn_agent_counts
 
 schedObj = BackgroundScheduler({'daemon': True})
 schedObj.add_jobstore(DjangoJobStore(), 'default')
@@ -22,7 +24,9 @@ if schedObj:
         schedObj.unschedule_job(_job)
     
 ''' Add all schedule jobs here '''
-#schedObj.add_job(get_cn_agent_counts, 'interval', minutes=10)
+ten_min_trigger = IntervalTrigger(minutes=15, start_date=datetime.now() + timedelta(seconds=15))
+schedObj.add_job(get_cn_agent_counts, ten_min_trigger, max_instances=2, id='get_cn_agent_counts', replace_existing=True)
+#schedObj.add_job(get_cn_agent_counts, "interval", minutes=10, next_run_time=(datetime.now() + timedelta(seconds=15)))
 
 print ("Starting scheduler")
 register_events(schedObj)

@@ -15,7 +15,7 @@ import json, calendar
 
 from dashboards.models import Stats
 from dashboards.ops.utils import http_request
-from dashboards.ops.jobs import schedObj
+#from dashboards.ops.jobs import schedObj
 from dashboards.ops import properties
 
 from dashboards.ops.connection import DBCmd, executeQuery, SQL
