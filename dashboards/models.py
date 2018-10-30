@@ -80,40 +80,28 @@ class Period(models.Model):
 
 
 class Source(models.Model):
-    
-    name = models.CharField(max_length=10, choices=[('msp', 'Service Providers'), ('tenants', 'Tenants'), ('users', 'Users'), ('resources', 'Resources')], unique=True)
-    
+
+    name = models.CharField(max_length=10, choices=[('partners', 'Service Providers'), ('tenants', 'Tenants'), ('users', 'Users'), ('resources', 'Resources')], unique=True)
+
     class Meta:
         db_table = "sources"
-    
+
     def __str__(self):
         return self.name
 
 
-class Product(models.Model):
-    
-    name = models.CharField(max_length=10, choices=[('ITOM', 'ITOM'), ('IMONSITE', 'IMONSITE')], unique=True)
-    #sources = models.ManyToManyField(Sources, through='Stats')
-    
-    class Meta:
-        db_table = "products"
-    
-    def __str__(self):
-        return self.name
+class ProductStats(models.Model):
 
-
-class Stats(models.Model):
-    
-    product  = models.ForeignKey(Product, on_delete=models.CASCADE)
     source   = models.ForeignKey(Source, on_delete=models.CASCADE)
     period   = models.ForeignKey(Period, on_delete=models.CASCADE)
-    
+
     active   = models.IntegerField()
     inactive = models.IntegerField()
-    
+
     class Meta:
         db_table = "product_stats"
-        unique_together = ('period', 'product', 'source',)
+        unique_together = ('period', 'source',)
+
     
     #def __str__(self):
-    #    return "product: {}, source: {}, active: {}, inactive: {}".format(self.product.__str__(), self.source.__str__(), self.active, self.inactive)
+    #    return "source: {}, active: {}, inactive: {}".format(self.product.__str__(), self.source.__str__(), self.active, self.inactive)

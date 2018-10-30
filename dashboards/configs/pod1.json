@@ -1,13 +1,18 @@
 {
     "1arc": {
+        "mysql": {
+            "host"     : "10.11.31.112",
+            "user"     : "devops",
+            "password" : "TTBkMWZ5LmRi",
+            "database" : "msp",
+            "raise_on_warnings": true
+        },
         "csnodes": [
             "cn01-rc.vistara.io",
             "cn02-rc.vistara.io",
             "cn03-rc.vistara.io",
             "cn04-rc.vistara.io",
-            "cn05-rc.vistara.io",
             "cn08-rc.vistara.io",
-            "cn09-rc.vistara.io",
             "cn11-rc.vistara.io",
             "cn12-rc.vistara.io",
             "cn13-rc.vistara.io",

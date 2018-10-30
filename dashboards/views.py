@@ -17,7 +17,7 @@ from datetime import date
 import calendar
 
 from dashboards.ops import manager, properties
-from .models import Stats
+from .models import ProductStats
 
 
 # Create your views here.
@@ -38,7 +38,7 @@ def dashboard(request):
  
     context = manager.pod_rsrc_stats_doughnut(month, year)
  
-    data = Stats.objects.filter(period__year=2017, period__month__gt=(12-3), product__name='ITOM')
+    data = ProductStats.objects.filter(period__year=2017, period__month__gt=(12-3))
     _hash = []
     for d in data:
         _hash.append({
@@ -50,7 +50,7 @@ def dashboard(request):
         })
      
     context.update({'data': str(_hash) })
-    context.update({'month': month, 'year': year, 'months': months, 'years': [2017, 2018]})
+    context.update({'month': month, 'year': year, 'months': months, 'years': [2017, 2018, 2019]})
     return render(request, 'views/dashboard.html', context)
 
 

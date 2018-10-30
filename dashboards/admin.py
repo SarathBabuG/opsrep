@@ -13,9 +13,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Period, Product, Source, Stats
+from .models import Period, Source, ProductStats
 
 admin.site.register(Period)
-admin.site.register(Product)
 admin.site.register(Source)
-admin.site.register(Stats)
+admin.site.register(ProductStats)

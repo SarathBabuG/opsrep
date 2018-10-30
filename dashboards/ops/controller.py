@@ -14,7 +14,7 @@
 #from dashboards.ops.utils import http_request
 from dashboards.ops import properties
 from dashboards.ops.connection import DBCmd, executeQuery, SQL
-
+from datetime import date
 
 def get_product_stats_data():
     sources = properties.source_maps[properties.product]
@@ -23,7 +23,7 @@ def get_product_stats_data():
     _hash = {'msp': {}, 'client': {}, 'users': {}}
     for source in sources:
         query1 = "select class_code,activated,count(*) as cnt from organizations where source=%s and class_code in ('msp','client') group by class_code, activated;"
-        results1  = executeQuery( DBCmd(SQL, query1, source) )[1]
+        results1  = executeQuery( DBCmd(SQL, query1, [source]) )[1]
         for result in results1:
             try:
                 _hash[result[0]][result[1]] += result[2]
@@ -31,7 +31,7 @@ def get_product_stats_data():
                 _hash[result[0]][result[1]] = result[2]
 
         query2 = "select activated,count(*) as au from users where source=%s group by activated;"
-        results2  = executeQuery( DBCmd(SQL, query2, source) )[1]
+        results2  = executeQuery( DBCmd(SQL, query2, [source]) )[1]
         for result in results2:
             try:
                 _hash['users'][result[0]] += result[1]
@@ -94,8 +94,10 @@ def get_product_stats_data():
         'reports_generated'  : reports_generated,
         'dashboards_created' : dashboards_created,
         'recordings_created' : recordings_created,
-        'looged_in_users'    : user_sessions
+        'logged_in_users'    : user_sessions
     }
 
     properties.orgstats = org_analytics
+    c_month = date.today().month
+    c_year  = date.today().year
 

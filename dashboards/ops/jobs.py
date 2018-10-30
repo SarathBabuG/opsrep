@@ -13,6 +13,7 @@
 from django_apscheduler.jobstores import register_events, DjangoJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime, timedelta
 from dashboards.ops.manager import get_cn_agent_counts
 from dashboards.ops.controller import get_product_stats_data
@@ -26,11 +27,12 @@ if schedObj:
     
 ''' Add all schedule jobs here '''
 ten_min_trigger = IntervalTrigger(minutes=15, start_date=datetime.now() + timedelta(seconds=15))
-schedObj.add_job(get_cn_agent_counts, ten_min_trigger, max_instances=2, id='get_cn_agent_counts', replace_existing=True)
+schedObj.add_job(get_cn_agent_counts, ten_min_trigger, max_instances=1, id='get_cn_agent_counts', replace_existing=True)
 #schedObj.add_job(get_cn_agent_counts, "interval", minutes=10, next_run_time=(datetime.now() + timedelta(seconds=15)))
 
-monthly_trigger = IntervalTrigger(days=30, start_date=datetime.now() + timedelta(seconds=15))
-schedObj.add_job(get_product_stats_data, monthly_trigger, max_instances=2, id='get_product_stats_data', replace_existing=True)
+
+monthly_trigger = CronTrigger(day=1, hour=0, minute=0, start_date=datetime.now() + timedelta(seconds=15))
+schedObj.add_job(get_product_stats_data, monthly_trigger, max_instances=1, id='get_product_stats_data', replace_existing=True)
 
 print ("Starting scheduler")
 register_events(schedObj)
