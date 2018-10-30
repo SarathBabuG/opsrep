@@ -43,7 +43,6 @@ def dashboard(request):
     for d in data:
         _hash.append({
             'month': d.period.month,
-            'product': d.product.name,
             'source' : d.source.name,
             'active' : d.active,
             'inactive' : d.inactive,

@@ -11,14 +11,13 @@
  */
 '''
 from rest_framework import serializers
-from dashboards.models import Stats
+from dashboards.models import ProductStats
 
 class StatsSerializer(serializers.ModelSerializer):
-    product = serializers.CharField(source='product.name')
     source = serializers.CharField(source='source.name')
     year = serializers.IntegerField(source='period.year')
     month = serializers.IntegerField(source='period.month')
 
     class Meta:
-        model = Stats
-        fields = ('product', 'source', 'year', 'month', 'active', 'inactive')
+        model = ProductStats
+        fields = ('source', 'year', 'month', 'active', 'inactive')
