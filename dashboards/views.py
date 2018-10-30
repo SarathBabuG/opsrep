@@ -50,7 +50,7 @@ def dashboard(request):
         })
      
     context.update({'data': str(_hash) })
-    context.update({'month': month, 'year': year, 'months': months, 'years': [2016, 2017, 2018]})
+    context.update({'month': month, 'year': year, 'months': months, 'years': [2017, 2018]})
     return render(request, 'views/dashboard.html', context)
 
 
