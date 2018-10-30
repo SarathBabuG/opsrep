@@ -81,12 +81,13 @@ def cnsessions(request):
     boards = []
     cdata  = []
     count  = 0
-    for cn, cn_data in properties.statsObj.get('1arc', {}).items():
+    _stats = properties.statsObj.get('1arc', {})
+    for cn in sorted(_stats.keys()):
         cdata.append({
             "csnode"   : cn.split("-")[0],
             "sessions" : {
-                "agent"   : int(cn_data["Agent"]),
-                "gateway" : int(cn_data["Gateway"])
+                "agent"   : int(_stats[cn]["Agent"]),
+                "gateway" : int(_stats[cn]["Gateway"])
             }
         })
         count += 1

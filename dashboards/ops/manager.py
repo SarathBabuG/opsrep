@@ -196,9 +196,11 @@ def get_cn_agent_counts():
     csplit = str.split
 
     for cn in pod1_rc_cns:
-        cn_url = sessions_url % (cn)
-        print(cn_url)
-        response = http_request(cn_url).decode().split("<br>")
-        sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
+        try:
+            cn_url = sessions_url % (cn)
+            response = http_request(cn_url).decode().split("<br>")
+            sessions[cn.split(".")[0]] = dict([(x[0], x[-1]) for x in map(csplit, response)])
+        except:
+            sessions[cn.split(".")[0]] = {"Total": 0, "Agent": 0, "Gateway": 0}
 
     properties.statsObj = {"1arc": sessions, "time": str(datetime.now())}

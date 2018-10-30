@@ -38,13 +38,10 @@ wrap = None
 
 import mysql.connector
 from mysql.connector import errorcode
-config = {
-  'host'     : '172.30.36.161',
-  'user'     : 'msp',
-  'password' : 'msp',
-  'database' : 'msp',
-  'raise_on_warnings': True,
-}
+from dashboards.ops import properties
+import base64
+config = properties.configs[properties.saas_key]["mysql"]
+config['password'] = base64.b64decode(config['password']).decode()
 
 
 class DBCmd:
