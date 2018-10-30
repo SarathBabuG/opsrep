@@ -189,28 +189,7 @@ def pod_rsrc_stats_pie():
 
 #@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
-    pod1_rc_cns = [
-        "cn01-rc.vistara.io",
-        "cn02-rc.vistara.io",
-        "cn03-rc.vistara.io",
-        "cn04-rc.vistara.io",
-        "cn05-rc.vistara.io",
-        "cn06-rc.vistara.io",
-        "cn07-rc.vistara.io",
-        "cn08-rc.vistara.io",
-        "cn09-rc.vistara.io",
-        "cn10-rc.vistara.io",
-        "cn11-rc.vistara.io",
-        "cn12-rc.vistara.io",
-        "cn13-rc.vistara.io",
-        "cn14-rc.vistara.io",
-        "cn15-rc.vistara.io",
-        "cn16-rc.vistara.io",
-        "cn17-rc.vistara.io",
-        "cn18-rc.vistara.io",
-        "cn19-rc.vistara.io",
-        "cn20-rc.vistara.io"
-    ]
+    pod1_rc_cns = properties.configs[properties.saas_key]["csnodes"] 
     
     sessions_url = "https://%s:8443/stats"
     sessions = {}

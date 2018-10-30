@@ -1,0 +1,33 @@
+{
+    "1arc": {
+        "csnodes": [
+            "cn01-rc.vistara.io",
+            "cn02-rc.vistara.io",
+            "cn03-rc.vistara.io",
+            "cn04-rc.vistara.io",
+            "cn05-rc.vistara.io",
+            "cn08-rc.vistara.io",
+            "cn09-rc.vistara.io",
+            "cn11-rc.vistara.io",
+            "cn12-rc.vistara.io",
+            "cn13-rc.vistara.io",
+            "cn14-rc.vistara.io",
+            "cn15-rc.vistara.io",
+            "cn20-rc.vistara.io",
+            "cn21-rc.vistara.io",
+            "cn22-rc.vistara.io",
+            "cn23-rc.vistara.io",
+            "cn24-rc.vistara.io"
+        ],
+        "hdfs": {
+            "master": "10.11.42.101"
+        },
+        "spark": {
+            "master": "10.11.42.101"
+        },
+        "redis": {
+        },
+        "couchbase": {
+        }
+    }
+}

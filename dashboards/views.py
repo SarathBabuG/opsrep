@@ -66,16 +66,16 @@ def page404(request):
 def cnsessions(request):
     '''
     var fData=[
-        {State:'AL',freq:{agent:4786, gateway:249}}
-        ,{State:'AZ',freq:{agent:1101, gateway:674}}
-        ,{State:'CT',freq:{agent:932, gateway:418}}
-        ,{State:'DE',freq:{agent:832, gateway:1862}}
-        ,{State:'FL',freq:{agent:4481, gateway:948}}
-        ,{State:'GA',freq:{agent:1619, gateway:1063}}
-        ,{State:'IA',freq:{agent:1819, gateway:1203}}
-        ,{State:'IL',freq:{agent:4498, gateway:942}}
-        ,{State:'IN',freq:{agent:797, gateway:1534}}
-        ,{State:'KS',freq:{agent:162, gateway:471}}
+        {csnode:'demo01',sessions:{agent:4786, gateway:249}}
+        ,{csnode:'demo02',sessions:{agent:1101, gateway:674}}
+        ,{csnode:'demo03',sessions:{agent:932, gateway:418}}
+        ,{csnode:'demo04',sessions:{agent:832, gateway:1862}}
+        ,{csnode:'demo05',sessions:{agent:4481, gateway:948}}
+        ,{csnode:'demo06',sessions:{agent:1619, gateway:1063}}
+        ,{csnode:'demo07',sessions:{agent:1819, gateway:1203}}
+        ,{csnode:'demo08',sessions:{agent:4498, gateway:942}}
+        ,{csnode:'demo09',sessions:{agent:797, gateway:1534}}
+        ,{csnode:'demo10',sessions:{agent:162, gateway:471}}
         ];
     '''
     boards = []

@@ -11,4 +11,13 @@
  */
 '''
 
+import os, json
+
+configs  = {}
 statsObj = {}
+config_file = "pod1.json"
+saas_key    = "1arc"
+
+working_dir = os.path.dirname(os.path.realpath(__file__))
+with open(os.path.join(working_dir, '../configs', config_file)) as f:
+    configs = json.loads(f.read())
