@@ -58,7 +58,7 @@ def charts(request):
     return render(request, 'views/charts.html', context)
 
 
-def page404(request):
+def page404():
     return  render_to_response('views/404.html')
 
 

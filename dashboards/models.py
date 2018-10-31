@@ -13,6 +13,7 @@
 from django.db import models
 from django.utils import six, timezone
 import calendar
+from docutils.utils.math.latex2mathml import mspace
 
 # Create your models here.
 class EnumField(models.Field):
@@ -105,3 +106,26 @@ class ProductStats(models.Model):
     
     #def __str__(self):
     #    return "source: {}, active: {}, inactive: {}".format(self.product.__str__(), self.source.__str__(), self.active, self.inactive)
+
+
+class MonthlyStats(models.Model):
+    choices = [
+        ('resources_added', 'Resources Added'),
+        ('alerts_created', 'Alerts Created'),
+        ('tickets_created', 'Tickets Created'),
+        ('reports_created', 'Reports Created'),
+        ('dashboards_created', 'Dashboards Created'),
+        ('recordings_created', 'Recordings Created'),
+        ('total_user_sessions', 'Total User Sessions'),
+        ('partner_user_sessions', 'Partner User Sessions'),
+        ('client_user_sessions', 'Client User Sessions'),
+        ('sp_user_sessions', 'SP User Sessions')
+    ]
+
+    period    = models.ForeignKey(Period, on_delete=models.CASCADE)
+    attrname  = models.CharField(max_length=50, choices=choices, unique=True)
+    attrvalue = models.IntegerField()
+
+    class Meta:
+        db_table = "monthly_stats"
+        unique_together = ('period', 'attrname',)

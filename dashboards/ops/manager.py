@@ -10,7 +10,7 @@
  * Copyright (c) 2018 OpsRamp, Inc. All rights reserved. 
  */
 '''
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 import json, calendar
 
 from dashboards.models import ProductStats

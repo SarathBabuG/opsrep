@@ -58,7 +58,7 @@ def get_product_stats_data():
 
     query6 = "select count(*) as alertscount from alerts.alert_master where ts > UNIX_TIMESTAMP(DATE_SUB(now(), interval %s day))*1000;" % (stats_interval)
     results6 = executeQuery( DBCmd(SQL, query6) )[1]
-    alerts_generated = results6[0][0]
+    alerts_created = results6[0][0]
     
     query7 = "select count(*) from sd_ticket where created_date > DATE_SUB(now(), interval %s day);" % (stats_interval)
     results7 = executeQuery( DBCmd(SQL, query7) )[1]
@@ -66,7 +66,7 @@ def get_product_stats_data():
     
     query8 = "select count(*) from schedule_reports where created_time > DATE_SUB(now(), interval %s day);" % (stats_interval)
     results8 = executeQuery( DBCmd(SQL, query8) )[1]
-    reports_generated = results8[0][0]
+    reports_created = results8[0][0]
     
     query9 = "select count(*) from dsb_dashboards where created_time > DATE_SUB(now(), interval %s day);" % (stats_interval)
     results9 = executeQuery( DBCmd(SQL, query9) )[1]
@@ -89,9 +89,9 @@ def get_product_stats_data():
 
     org_analytics['stats'] = {
         'resources_added'    : managed_resources,
-        'alerts_generated'   : alerts_generated,
+        'alerts_created'     : alerts_created,
         'tickets_created'    : tickets_created,
-        'reports_generated'  : reports_generated,
+        'reports_created'    : reports_created,
         'dashboards_created' : dashboards_created,
         'recordings_created' : recordings_created,
         'logged_in_users'    : user_sessions
