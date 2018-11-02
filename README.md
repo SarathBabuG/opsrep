@@ -23,6 +23,12 @@ pip3 install mysql-connector-python
 pip3 install gunicorn
 ```
 
+### Collect static files
+
+```
+python3 manage.py collectstatic
+```
+
 ### Create DB file
 
 ```
