@@ -15,20 +15,27 @@
 from dashboards.ops import properties
 from dashboards.ops.connection import DBCmd, executeQuery, SQL
 from datetime import date
+from dashboards.models import Period, Source, ProductStats, MonthlyStats
 
 def get_product_stats_data():
     sources = properties.source_maps[properties.product]
     stats_interval = "30"
 
-    _hash = {'msp': {}, 'client': {}, 'users': {}}
+    _hash = {'partners': {}, 'tenants': {}, 'users': {}}
     for source in sources:
         query1 = "select class_code,activated,count(*) as cnt from organizations where source=%s and class_code in ('msp','client') group by class_code, activated;"
         results1  = executeQuery( DBCmd(SQL, query1, [source]) )[1]
         for result in results1:
+            _key = result[0]
+            if result[0] == 'msp':
+                _key = "partners"
+            elif result[0] == 'client':
+                _key = "tenants"
+
             try:
-                _hash[result[0]][result[1]] += result[2]
+                _hash[_key][result[1]] += result[2]
             except:
-                _hash[result[0]][result[1]] = result[2]
+                _hash[_key][result[1]] = result[2]
 
         query2 = "select activated,count(*) as au from users where source=%s group by activated;"
         results2  = executeQuery( DBCmd(SQL, query2, [source]) )[1]
@@ -47,7 +54,7 @@ def get_product_stats_data():
     
     inactive  = results3[0][0]
     active    = results4[0][0] - inactive
-    org_analytics['devices'] = {
+    org_analytics['resources'] = {
         0: inactive,
         1: active
     }
@@ -85,7 +92,6 @@ def get_product_stats_data():
     query12 = "select count(*) from login_history where login_time > DATE_SUB(now(),interval %s day);" % (stats_interval)
     results12 = executeQuery( DBCmd(SQL, query12) )[1]
     total_user_sessions = results12[0][0]
-    user_sessions.update({'total_user_sessions': total_user_sessions})
 
     org_analytics['stats'] = {
         'resources_added'    : managed_resources,
@@ -94,10 +100,29 @@ def get_product_stats_data():
         'reports_created'    : reports_created,
         'dashboards_created' : dashboards_created,
         'recordings_created' : recordings_created,
-        'logged_in_users'    : user_sessions
+        'logged_in_users'    : {
+            'total_user_sessions'   : total_user_sessions,
+            'partner_user_sessions' : user_sessions['msp'],
+            'client_user_sessions'  : user_sessions['client'],
+            'sp_user_sessions'      : user_sessions['service_provider']
+        }
     }
 
-    properties.orgstats = org_analytics
     c_month = date.today().month
     c_year  = date.today().year
+    periodObj = Period.objects.get_or_create(year=c_year, month=c_month)[0]
+    for src in list(dict(Source.choices).keys()):
+        sourceObj = Source.objects.get_or_create(name=src)[0]
+        ProductStats(period=periodObj, source=sourceObj, active=org_analytics[src][1], inactive=org_analytics[src][0]).save()
+        #ProductStats.objects.get_or_create(period=periodObj, source=sourceObj, active=org_analytics[src][1], inactive=org_analytics[src][0])
 
+    for src in org_analytics['stats'].keys():
+        if src != 'logged_in_users':
+            MonthlyStats(period=periodObj, attrname=src, attrvalue=org_analytics['stats'][src]).save()
+            #MonthlyStats.objects.get_or_create(period=periodObj, attrname=src, attrvalue=org_analytics['stats'][src])
+        else:
+            for _key in org_analytics['stats'][src].keys():
+                MonthlyStats(period=periodObj, attrname=_key, attrvalue=org_analytics['stats'][src][_key]).save()
+                #MonthlyStats.objects.get_or_create(period=periodObj, attrname=_key, attrvalue=org_analytics['stats'][src][_key])
+
+    properties.orgstats = org_analytics

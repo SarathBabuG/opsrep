@@ -97,7 +97,7 @@ def pod_rsrc_stats_doughnut(month=date.today().month, year=date.today().year):
 
 
 def pod_rsrc_stats_pie():
-    last = 3
+    last = 6
 
     months = dict((k, v) for k,v in enumerate(calendar.month_abbr))
     del months[0]
@@ -105,7 +105,7 @@ def pod_rsrc_stats_pie():
     month = date.today().month
     year  = date.today().year
 
-    sources    = ['msp', 'tenants', 'users']
+    sources    = ['partners', 'tenants', 'users', 'resources']
     chart_type = "bar"
     datasets   = []
     options    = {
