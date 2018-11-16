@@ -1,34 +1,20 @@
 {
     "1arc": {
         "mysql": {
-            "host"     : "10.11.31.112",
-            "user"     : "devops",
-            "password" : "TTBkMWZ5LmRi",
-            "database" : "msp",
+            "host"     : "db-slave-ip",
+            "user"     : "user",
+            "password" : "base64_encryped_passwd",
+            "database" : "dbname",
             "raise_on_warnings": true
         },
         "csnodes": [
-            "cn01-rc.vistara.io",
-            "cn02-rc.vistara.io",
-            "cn03-rc.vistara.io",
-            "cn04-rc.vistara.io",
-            "cn08-rc.vistara.io",
-            "cn11-rc.vistara.io",
-            "cn12-rc.vistara.io",
-            "cn13-rc.vistara.io",
-            "cn14-rc.vistara.io",
-            "cn15-rc.vistara.io",
-            "cn20-rc.vistara.io",
-            "cn21-rc.vistara.io",
-            "cn22-rc.vistara.io",
-            "cn23-rc.vistara.io",
-            "cn24-rc.vistara.io"
+            "cn01.opsramp.com"
         ],
         "hdfs": {
-            "master": "10.11.42.101"
+            "master": "x.x.x.x"
         },
         "spark": {
-            "master": "10.11.42.101"
+            "master": "x.x.x.x"
         },
         "redis": {
         },
