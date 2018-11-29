@@ -35,6 +35,7 @@ urlpatterns = [
 
     url(r'^dashboard', views.dashboard, name='dashboard'),
     url(r'^charts', views.charts, name='charts'),
+    url(r'^resourcestats', views.resource_stats, name='resourcestats'),
     url(r'^cnsessions', views.cnsessions, name='cnsessions'),
     url(r'^page404', views.page404, name='page404'),
 ]

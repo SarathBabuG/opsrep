@@ -1,0 +1,251 @@
+{% load static %}
+{% load opsrep_utils %}
+<script>
+    let usage_stats = JSON.parse('{{ usage_stats | escapejs }}');
+    let resources_stats = JSON.parse('{{ resources_stats | escapejs }}');
+    let label = JSON.parse('{{labels | escapejs }}');
+    let dataset = JSON.parse('{{datasets | escapejs }}') 
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
+
+
+    <!---starting resources -->
+    <div class="card">
+    <div class="card-header"><strong>ITOP Resources</strong></div>
+    <div class="card-body">
+        <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                <div class="callout callout-success">
+                    <small class="text-muted"><strong>Total Active</strong></small>
+                    <br>
+                    <strong class="h4"><div id="total_active_resources"></div></strong>
+                </div>
+                </div>
+
+                <div class="col-sm-6">
+                <div class="callout callout-warning">
+                    <small class="text-muted"><strong>Discovered & Inactive</strong></small>
+                    <br>
+                    <strong class="h4"><div id="discovered_n_inactive"></div></strong>
+                </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+    <!-- User Login Stats -->
+    <div class="card">
+    <div class="card-header"><strong>User Logins [Last 30 Days]</strong></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+            <div class="callout callout-success">
+                <small class="text-muted"><strong>Client Users</strong></small>
+                <br>
+                <strong class="h4"><div id="client_user_sessions"></div></strong>
+            </div>
+            </div>
+
+            <div class="col">
+            <div class="callout callout-success">
+                <small class="text-muted"><strong>Partner Users</strong></small>
+                <br>
+                <strong class="h4"><div id="partner_user_sessions"></div></strong>
+            </div>
+            </div>
+
+            <div class="col">
+            <div class="callout callout-success">
+                <small class="text-muted"><strong>Service Provider Users</strong></small>
+                <br>
+                <strong class="h4"><div id="sp_user_sessions"></div></strong>
+            </div>
+            </div>
+
+            <div class="col">
+            <div class="callout callout-success">
+                <small class="text-muted"><strong>Total User Sessions</strong></small>
+                <br>
+                <strong class="h4"><div id="total_user_sessions"></div></strong>
+            </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Usage stats -->
+    <div class="card">
+    <div class="card-header"><strong>Resource Statistics [Last 30 days]</strong></div>
+    <div class="card-body">
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-primary">
+            <div class="card-body pb-0">
+                <div class="text-value"><div id="resources_added"></div></div>
+                <div><strong>Managed Resources</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3">
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart1"></canvas></div>
+              </div>
+        </div>
+    
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-success">
+            <div class="card-body pb-0">
+                <div class="text-value"><div id="alerts_created"></div></div>
+                <div><strong>Aggregated Alerts</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3">
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart2"></canvas></div>
+            </div>
+        </div>
+    
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-secondary">
+            <div class="card-body pb-0">
+                <div class="text-value"><div id="tickets_created"></div></div>
+                <div><strong>Tickets Created</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3">
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart3"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-info">
+            <div class="card-body pb-0">
+                <div class="text-value"><div id="reports_created"></div></div>
+                <div><strong>Reports Created</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3" >
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart4"></canvas></div>
+              </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+              <div class="card text-white bg-warning">
+            <div class="card-body pb-0">
+                  <div class="text-value"><div id="dashboards_created"></div></div>
+                  <div><strong>Dashboard Created</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3" >
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart5"></canvas></div>
+              </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-white bg-danger">
+            <div class="card-body pb-0">
+                <div class="text-value"><div id="recordings_created"></div></div>
+                <div><strong>Recordings Created</strong></div>
+            </div>
+            <div class="chart-wrapper mt-3 mx-3" >
+            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+                <canvas class="chart chartjs-render-monitor" id="myChart6"></canvas></div>
+              </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+<script>
+    /************* User Login Stats ********************/
+    document.getElementById('client_user_sessions').innerHTML = usage_stats['client_user_sessions'];
+    document.getElementById('partner_user_sessions').innerHTML = usage_stats['partner_user_sessions'];
+    document.getElementById('sp_user_sessions').innerHTML = usage_stats['sp_user_sessions'];
+    document.getElementById('total_user_sessions').innerHTML = usage_stats['total_user_sessions'];
+    
+    /************* Active Devices ********************/
+    document.getElementById('total_active_resources').innerHTML = resources_stats['active']
+    document.getElementById('discovered_n_inactive').innerHTML = resources_stats['inactive']
+
+    /************* Resource stats ********************/
+    document.getElementById('alerts_created').innerHTML = usage_stats['alerts_created'];
+    document.getElementById('dashboards_created').innerHTML = usage_stats['dashboards_created'];
+    document.getElementById('recordings_created').innerHTML = usage_stats['recordings_created'];
+    document.getElementById('reports_created').innerHTML = usage_stats['reports_created'];
+    document.getElementById('tickets_created').innerHTML = usage_stats['tickets_created'];
+    document.getElementById('resources_added').innerHTML = usage_stats['resources_added'];
+
+    /*****************************************************/
+    $(function(){
+        let i,x;
+        let mychart = ['myChart1','myChart2','myChart3','myChart4','myChart5','myChart6'];
+
+        for (i = 0; i < 6 ; i++) {
+            x = mychart[i]; 
+            var ctx = document.getElementById(x).getContext("2d");
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: label,
+                    datasets: [{
+                        label: "",
+                        pointBorderColor: "",
+                        pointBorderWidth: 1,
+                        pointRadius: 5,
+                        fill: false,
+                        borderWidth: 4,
+                        data: dataset[i]
+                    }]
+                },
+                options: {
+                    legend: {
+                        position: ""
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(0,0,0,0.5)",
+                                fontStyle: "bold",
+                                beginAtZero: 'transparent',
+                                maxTicksLimit: 12,
+                            },
+                            display: false,
+                            gridLines: {
+                                display: false
+                            }
+                            }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "rgba(0,0,0,0.5)",
+                                fontStyle: "bold",
+                                beginAtZero: 'transparent',
+                                maxTicksLimit: 12,
+                            },
+                            display: false,
+                        }],
+                    }
+                }
+        
+            })
+        }
+
+    });
+
+    setTimeout(function(){
+        window.location.reload(1);
+    }, 50000);
+</script>
+

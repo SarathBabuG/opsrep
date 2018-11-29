@@ -58,6 +58,11 @@ def charts(request):
     return render(request, 'views/charts.html', context)
 
 
+def resource_stats(request):
+    context = manager.get_monthly_usage_stats()
+    return render(request, 'views/resource_stats.html', context)
+
+
 def page404():
     return  render_to_response('views/404.html')
 

@@ -14,6 +14,7 @@ from datetime import date, datetime
 import json, calendar
 
 from dashboards.models import ProductStats
+from dashboards.models import MonthlyStats
 from dashboards.ops.utils import http_request
 #from dashboards.ops.jobs import schedObj
 from dashboards.ops import properties
@@ -199,3 +200,63 @@ def get_cn_agent_counts():
             sessions[cn.split(".")[0]] = {"Total": 0, "Agent": 0, "Gateway": 0}
 
     properties.statsObj = {"1arc": sessions, "time": str(datetime.now())}
+
+
+
+def get_monthly_usage_stats(month=date.today().month, year=date.today().year):
+
+    last = 6
+
+    months = dict((k, v) for k,v in enumerate(calendar.month_abbr))
+    del months[0]
+
+    #sources    = ['partners', 'tenants', 'users', 'resources']    
+    sources    = ['resources_added','alerts_created','tickets_created','reports_created','dashboards_created','recordings_created']
+    datasets   = []
+
+    itom_stats = MonthlyStats.objects.filter(period__year=year, period__month__gt=(month-last), period__month__lt=(month+1)).order_by('period__month')
+    if month < last:
+        prev_year   = year - 1
+        prev_months = last - (month % last)
+        py_itom_stats = MonthlyStats.objects.filter(period__year=prev_year, period__month__gt=(12-prev_months), period__month__lt=(12+1)).order_by('period__month')
+        cy_itom_stats = MonthlyStats.objects.filter(period__year=year, period__month__gt=(month-(month % last)), period__month__lt=(month+1)).order_by('period__month')
+        itom_stats = (list(py_itom_stats) + list(cy_itom_stats))
+
+    product_hash = {}
+    labels = []
+    
+    for _stat in itom_stats:
+        if months[_stat.period.month] not in labels:
+            labels.append(months[_stat.period.month])
+
+        if _stat.attrname not in product_hash:
+            product_hash[_stat.attrname] = {'active': []}
+
+        product_hash[_stat.attrname]['active'].append(_stat.attrvalue)
+
+
+    for src in sources:
+        if src not in product_hash:
+            continue
+
+        active_values   = product_hash[src]['active']
+        datasets.append(active_values)
+
+
+
+    # For monthly logic stats        
+    usage_stats = MonthlyStats.objects.filter(period__year=year, period__month=month)
+    user_stats = ProductStats.objects.filter(period__year=year, period__month=month)
+    _hash = {}
+    for _stat in usage_stats:
+        _hash[_stat.attrname] = _stat.attrvalue
+
+    user_hash = {}
+    for _stat in user_stats:
+        if _stat.source.name == "resources":
+            user_hash['active'] = _stat.active
+            user_hash['inactive'] = _stat.inactive
+
+    context = {'resources_stats': str(json.dumps(user_hash)), 'usage_stats': str(json.dumps(_hash)), 'labels': str(json.dumps(labels)) ,
+            'datasets': json.dumps(datasets)}
+    return context
