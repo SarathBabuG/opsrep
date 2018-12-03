@@ -104,3 +104,8 @@ def cnsessions(request):
         boards.append(cdata)
 
     return  render(request, 'views/cnsessions.html', { "csn_sessions_data": boards, "agents_data": properties.statsObj.get('1arc', {}) })
+
+
+def elasticsearch(request):
+    context = manager.get_elasticsearch_cluster_info()
+    return render(request, 'views/elasticsearch.html', context)
