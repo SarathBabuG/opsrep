@@ -185,13 +185,13 @@ def pod_rsrc_stats_pie():
 
 #@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
-    pod1_rc_cns = properties.configs[properties.saas_key]["csnodes"] 
+    cn_hosts = properties.configs[properties.saas_key]["csnodes"]
     
     sessions_url = "https://%s:8443/stats"
     sessions = {}
     csplit = str.split
 
-    for cn in pod1_rc_cns:
+    for cn in cn_hosts:
         try:
             cn_url = sessions_url % (cn)
             response = http_request(cn_url).decode().split("<br>")
@@ -259,4 +259,63 @@ def get_monthly_usage_stats(month=date.today().month, year=date.today().year):
 
     context = {'resources_stats': str(json.dumps(user_hash)), 'usage_stats': str(json.dumps(_hash)), 'labels': str(json.dumps(labels)) ,
             'datasets': json.dumps(datasets)}
+    return context
+
+
+def get_elasticsearch_cluster_info():
+    es_configs = properties.configs[properties.saas_key]["csnodes"]
+    EURL = "http://%s:%s" % (es_configs['nodes'][0], es_configs['port'])
+
+    health_data    = json.loads(http_request(EURL + es_configs['health_uri']).decode())    
+    stats_data     = json.loads(http_request(EURL + es_configs['stats_uri']).decode())
+    cluster_health = {
+        'cluster.name'          : health_data['cluster_name'],
+        'cluster.state'         : health_data['status'],
+        'cluster.nodes'         : health_data['number_of_nodes'],
+        'cluster.nodes.data'    : health_data['number_of_data_nodes'],
+        'active.primary.shards' : health_data['active_primary_shards'],
+        'active.shards'         : health_data['active_shards'],
+        'primaries.docs' : stats_data['_all']['primaries']['docs']['count'],
+        'primaries.size' : stats_data['_all']['primaries']['store']['size_in_bytes'],
+        'indices'        : []
+    }
+
+
+    indices_data = http_request(EURL + es_configs['indices_uri']).decode()
+    for index_line in indices_data.splitlines():
+        index_stats = index_line.split()
+        _index = index_stats[2]
+        _hash = {
+            _index: {
+                'index.health'           : index_stats[0],
+                'index.state'            : index_stats[1],
+                'number_of_shards'       : index_stats[4],
+                'number_of_replicas'     : index_stats[5],
+                'primaries.docs.count'   : index_stats[6],
+                'primaries.docs.deleted' : index_stats[7],
+                'total.size'             : index_stats[8],
+                'primaries.size'         : index_stats[9]
+            }
+        }
+        cluster_health['indices'].append(_hash)
+
+
+    indices = cluster_health["indices"]
+    indices_list = []
+    for i in indices:
+        for key, value in i.items():
+            value_dict = dict()
+            value_dict.update({
+                'name': key,
+                'health': value['index.health'],
+                'shards': value['number_of_shards'],
+                'replicas': value['number_of_replicas'],
+                'docs_count': value['primaries.docs.count'],
+                'docs_deleted': value['primaries.docs.deleted'],
+                'primaries_size': value['primaries.size'],
+                'total_size': value['total.size']
+            })
+            indices_list.append(value_dict)
+
+    context = {'es_stats': str(json.dumps(cluster_health)), 'indices': str(json.dumps(indices)),'indices_list': str(json.dumps(indices_list))}
     return context
