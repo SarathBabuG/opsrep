@@ -193,7 +193,7 @@
         let i,x;
         let mychart = ['myChart1','myChart2','myChart3','myChart4','myChart5','myChart6'];
 
-        for (i = 0; i < 6 ; i++) {
+        for (i = 0; i < 5 ; i++) {
             x = mychart[i]; 
             var ctx = document.getElementById(x).getContext("2d");
             var myChart = new Chart(ctx, {
@@ -241,6 +241,56 @@
         
             })
         }
+
+        i = 5;
+        x = mychart[i];
+        var ctx = document.getElementById(x).getContext("2d");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label,
+                datasets: [{
+                    backgroundColor: getStyle('--primary'),
+                    borderColor: 'rgba(255,255,255,.55)',
+                    data: dataset[i],
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        display: false,
+					    ticks: {
+                            display: false
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            color: 'transparent',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: {
+                            fontSize: 2,
+                            fontColor: 'transparent'
+                        }
+                    }],
+                },
+                elements: {
+                    line: {
+                        borderWidth: 1
+                    },
+                    point: {
+                        radius: 4,
+                        hitRadius: 10,
+                        hoverRadius: 4
+                    }
+                }
+            }
+
+        })
 
     });
 

@@ -239,12 +239,12 @@ def get_monthly_usage_stats(month=date.today().month, year=date.today().year):
         if src not in product_hash:
             continue
 
-        active_values   = product_hash[src]['active']
+        active_values = product_hash[src]['active']
         datasets.append(active_values)
 
 
 
-    # For monthly logic stats        
+    # For monthly logic stats
     usage_stats = MonthlyStats.objects.filter(period__year=year, period__month=month)
     user_stats = ProductStats.objects.filter(period__year=year, period__month=month)
     _hash = {}
