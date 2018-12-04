@@ -3,13 +3,21 @@
         "mysql": {
             "host"     : "db-slave-ip",
             "user"     : "user",
-            "password" : "base64_encryped_passwd",
+            "password" : "cGFzc3dvcmQ=",
             "database" : "dbname",
             "raise_on_warnings": true
         },
         "csnodes": [
             "cn01.opsramp.com"
         ],
+        "elasticsearch" : {
+            "nodes"        : ["127.0.0.1"],
+            "port"         : 9200,
+            "health_uri"   : "/_cluster/health",
+            "stats_uri"    : "/_stats",
+            "settings_uri" : "/_settings",
+            "indices_uri"  : "/_cat/indices?s=index:asc"
+        },
         "hdfs": {
             "master": "x.x.x.x"
         },

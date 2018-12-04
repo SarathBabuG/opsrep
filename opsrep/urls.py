@@ -25,3 +25,7 @@ urlpatterns = [
     url(r'^', include('dashboards.urls')),
 
 ]
+
+# from django.conf import settings
+# from django.conf.urls.static import static
+# urlpatterns + static('^static/(?P<path>.*)$', document_root=settings.STATIC_ROOT)

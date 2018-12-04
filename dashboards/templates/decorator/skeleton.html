@@ -1,9 +1,8 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="{% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% else %}en{% endif %}">
 
 <head>
+    {% load static %}
     <!-- This meta tag *must* come first in the head; any other head content must come *after* these tag -->
     <meta charset="utf-8">
 	<!--
@@ -21,13 +20,13 @@
 
     {% block head-css %}
     <!--  <link rel="stylesheet" href="{% static "dashboard/css/nav.css" %}">  -->
-    <link rel="stylesheet" href="{% static "dashboard/css/style.css" %}">
-    <link rel="stylesheet" href="{% static "dashboard/css/simple-line-icons.css" %}">
-    <link rel="stylesheet" href="{% static "dashboard/css/bootstrap.css" %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/simple-line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.css' %}">
     <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" type="text/css">  -->
 
     <!-- Font Awesome icon font -->
-    <link rel="stylesheet" href="{% static "commons/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static 'commons/css/font-awesome.min.css' %}">
     <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">  -->
     {% endblock %}
 
@@ -94,14 +93,14 @@
 <!-- Block body javascript -->
 {% block body-javascript %}
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{% static "commons/js/jquery.min.js" %}"></script>
-    <script src="{% static "dashboard/js/app.js" %}"></script>
+    <script src="{% static 'commons/js/jquery.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/app.js' %}"></script>
 
-    <script src="{% static "dashboard/js/popper.min.js" %}"></script>
-    <script src="{% static "dashboard/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "dashboard/js/pace.min.js" %}"></script>
-    <script src="{% static "dashboard/js/Chart.min.js" %}"></script>
-    <script src="{% static "dashboard/js/Chart.PieceLabel.min.js" %}"></script>
+    <script src="{% static 'dashboard/js/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/pace.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/Chart.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/Chart.PieceLabel.min.js' %}"></script>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
