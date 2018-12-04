@@ -1,10 +1,65 @@
 {% load static %}
 {% load opsrep_utils %}
+
 <script>
-    let usage_stats = JSON.parse('{{ usage_stats | escapejs }}');
-    let resources_stats = JSON.parse('{{ resources_stats | escapejs }}');
-    let labels = JSON.parse('{{labels | escapejs }}');
-    let dataset = JSON.parse('{{datasets | escapejs }}') 
+    var usage_stats = JSON.parse('{{ usage_stats | escapejs }}');
+    var resources_stats = JSON.parse('{{ resources_stats | escapejs }}');
+    var labels = JSON.parse('{{ labels | escapejs }}');
+    var dataset = JSON.parse('{{ datasets | escapejs }}');
+
+    var ctx = null;
+    var myChart = null;
+    for (var i = 0; i < 6 ; i++) {
+        ctx = document.getElementById("card-chart"+(i+1));
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Count',
+                    backgroundColor: "transparent",
+                    borderColor: 'rgba(255,255,255,.55)',
+                    data: dataset[i],
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            display: false
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            color: 'transparent',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: {
+                            fontSize: 2,
+                            fontColor: 'transparent'
+                        }
+                    }],
+                },
+                elements: {
+                    line: {
+                        borderWidth: 1
+                    },
+                    point: {
+                        radius: 4,
+                        hitRadius: 10,
+                        hoverRadius: 4
+                    }
+                }
+            }
+
+        })
+    }
+
 </script>
 
 <div class="animated fadeIn">
@@ -145,9 +200,9 @@
             </div>
             </div>
         </div>
-
+        <!--
         <div class="col-sm-6 col-lg-3">
-            <div class="card text-white bg-primary">
+            <div class="card text-white bg-danger">
             <div class="card-body pb-0">
                 <div class="text-value"><div id="recordings_created"></div></div>
                 <div><strong>Recordings Created</strong></div>
@@ -157,6 +212,28 @@
             </div>
             </div>
         </div>
+        -->
+
+        <div class="col-sm-6 col-lg-3">
+            <div class="brand-card">
+                <div class="brand-card-header text-white bg-danger">
+                    <!-- <i class="fa fa-facebook"></i> -->
+                    <div class="chart-wrapper mt-3 mx-3">
+                        <canvas class="chart" id="card-chart6" height="90"></canvas>
+                    </div>
+                </div>
+                <div class="brand-card-body">
+                    <div>
+                        <div class="text-uppercase text-muted small">Recordings</div>
+                        <div class="text-uppercase text-muted small">Created</div>
+                    </div>
+                    <div>
+                        <div class="text-value"><div id="recordings_created"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     </div>
     </div>
@@ -182,61 +259,6 @@
     document.getElementById('reports_created').innerHTML = usage_stats['reports_created'];
     document.getElementById('tickets_created').innerHTML = usage_stats['tickets_created'];
     document.getElementById('resources_added').innerHTML = usage_stats['resources_added'];
-
-    /*****************************************************/
-    $(function(){
-        let i,x;
-        for (i = 0; i < 6 ; i++) {
-            var ctx = document.getElementById("card-chart"+(i+1));
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Count',
-                        backgroundColor: "transparent",
-                        borderColor: 'rgba(255,255,255,.55)',
-                        data: dataset[i],
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            display: false,
-                            ticks: {
-                                display: false
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                color: 'transparent',
-                                zeroLineColor: 'transparent'
-                            },
-                            ticks: {
-                                fontSize: 2,
-                                fontColor: 'transparent'
-                            }
-                        }],
-                    },
-                    elements: {
-                        line: {
-                            borderWidth: 1
-                        },
-                        point: {
-                            radius: 4,
-                            hitRadius: 10,
-                            hoverRadius: 4
-                        }
-                    }
-                }
-
-            })
-        }
-    });
 
     /*
     setTimeout(function(){
