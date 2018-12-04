@@ -57,6 +57,9 @@ def charts(request):
     context = manager.pod_rsrc_stats_pie()
     return render(request, 'views/charts.html', context)
 
+def product_stats(request):
+    context = manager.pod_product_stats()
+    return render(request, 'views/product_stats.html', context)
 
 def resource_stats(request):
     context = manager.get_monthly_usage_stats()

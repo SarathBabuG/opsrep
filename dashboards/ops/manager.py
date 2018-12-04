@@ -183,6 +183,82 @@ def pod_rsrc_stats_pie():
     return context
 
 
+def pod_product_stats():
+    last = 6
+
+    months = dict((k, v) for k,v in enumerate(calendar.month_abbr))
+    del months[0]
+
+    month = date.today().month
+    year  = date.today().year
+
+    sources    = ['partners', 'tenants', 'users', 'resources']
+    itom_stats = ProductStats.objects.filter(period__year=year, period__month__gt=(month-last), period__month__lt=(month+1)).order_by('period__month')
+    if month < last:
+        prev_year   = year - 1
+        prev_months = last - (month % last)
+        py_itom_stats = ProductStats.objects.filter(period__year=prev_year, period__month__gt=(12-prev_months), period__month__lt=(12+1)).order_by('period__month')
+        cy_itom_stats = ProductStats.objects.filter(period__year=year, period__month__gt=(month-(month % last)), period__month__lt=(month+1)).order_by('period__month')
+        itom_stats = (list(py_itom_stats) + list(cy_itom_stats))
+
+    product_hash = {}
+    labels = []
+    for _stat in itom_stats:
+        if months[_stat.period.month] not in labels:
+            labels.append(months[_stat.period.month])
+
+        if _stat.source.name not in product_hash:
+            product_hash[_stat.source.name] = {'active': [], 'inactive': []}
+
+        product_hash[_stat.source.name]['active'].append(_stat.active)
+        product_hash[_stat.source.name]['inactive'].append(_stat.inactive)
+
+    """
+    Result:
+    _hash = {
+        "partners": {
+            "active": [12, 13, 10],      #10th, 11th, 12th months values
+            "inactive": [12, 13, 10],
+        },
+        "tenants": {
+            "active":   [11, 7, 6],      #10th, 11th, 12th months values
+            "inactive": [8, 31, 10],
+        },
+        
+    }
+    """
+    datasets = []
+    for src in sources:
+        if src not in product_hash:
+            continue
+
+        dashboard       = src.upper()
+        active_values   = product_hash[src]['active']
+        inactive_values = product_hash[src]['inactive']
+        datasets.append({
+            'name'     : dashboard,
+            'dataset'  : [{
+                'label': 'Active',
+                'data' : active_values,
+                'backgroundColor': 'rgba(151, 187, 205, 0.5)',
+                'borderColor': 'rgba(151, 187, 205, 0.8)',
+                'highlightFill': 'rgba(151, 187, 205, 0.75)',
+                'highlightStroke': 'rgba(151, 187, 205, 1)',
+            },{
+                'label': 'Inactive',
+                'data' : inactive_values,
+                'backgroundColor': 'rgba(220, 220, 220, 0.5)',
+                'borderColor': 'rgba(220, 220, 220, 0.8)',
+                'highlightFill': 'rgba(220, 220, 220, 0.75)',
+                'highlightStroke': 'rgba(220, 220, 220, 1)',
+            }]
+
+        })
+    context = {'labels': json.dumps(labels), 'data_sets': json.dumps(datasets)}
+    return context
+
+
+
 #@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
     cn_hosts = properties.configs[properties.saas_key]["csnodes"]

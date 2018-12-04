@@ -2,7 +2,7 @@
             <nav class="sidebar-nav">
             <ul class="nav">
                 <li class="nav-item">
-                <a class="nav-link" href="/dashboard"><i class="icon-speedometer"></i> Dashboard <!--  <span class="badge badge-primary">NEW</span> --> </a>
+                <a class="nav-link" href="/dashboard"><i class="icon-speedometer"></i> Dashboard </a>
                 </li>
 
                 <!--
@@ -16,22 +16,33 @@
                 </li>
 
                 <li class="nav-item nav-dropdown">
-                    <a class="nav-link nav-dropdown-toggle" href="#" ><i class="icon-puzzle"></i> Resources</a>
+                    <a class="nav-link nav-dropdown-toggle" href="#" ><i class="icon-puzzle"></i> POD Metrics</a>
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
+                            <a class="nav-link" href="/productstats"><i class="icon-pie-chart"></i> Product Stats</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/resourcestats"><i class="icon-puzzle"></i> Resources</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/cnsessions"><i class="icon-puzzle"></i> CN Sessions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/resourcestats"><i class="icon-puzzle"></i> Statistics</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="components/social-buttons.html"><i class="icon-puzzle"></i> 404 Not Found</a>
                         </li>
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/elasticsearch" ><i class="icon-arrow-right-circle"></i> ElasticSearch</a>
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link nav-dropdown-toggle" href="#" ><i class="icon-puzzle"></i> Operations Data</a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/elasticsearch" ><i class="icon-arrow-right-circle"></i> ElasticSearch</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/elasticsearch" ><i class="icon-arrow-right-circle"></i> Cassandra</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/redis" ><i class="icon-arrow-right-circle"></i> Redis</a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
             </nav>
