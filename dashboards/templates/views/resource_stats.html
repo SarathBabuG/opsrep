@@ -3,18 +3,12 @@
 <script>
     let usage_stats = JSON.parse('{{ usage_stats | escapejs }}');
     let resources_stats = JSON.parse('{{ resources_stats | escapejs }}');
-    let label = JSON.parse('{{labels | escapejs }}');
+    let labels = JSON.parse('{{labels | escapejs }}');
     let dataset = JSON.parse('{{datasets | escapejs }}') 
 </script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css">
-
-
-    <!---starting resources -->
+<div class="animated fadeIn">
+    <!-- starting resources -->
     <div class="card">
     <div class="card-header"><strong>ITOP Resources</strong></div>
     <div class="card-body">
@@ -96,10 +90,10 @@
                 <div class="text-value"><div id="resources_added"></div></div>
                 <div><strong>Managed Resources</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3">
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart1"></canvas></div>
-              </div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart1" height=100></canvas>
+            </div>
+            </div>
         </div>
     
         <div class="col-sm-6 col-lg-3">
@@ -108,9 +102,9 @@
                 <div class="text-value"><div id="alerts_created"></div></div>
                 <div><strong>Aggregated Alerts</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3">
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart2"></canvas></div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart2" height=100></canvas>
+            </div>
             </div>
         </div>
     
@@ -120,9 +114,9 @@
                 <div class="text-value"><div id="tickets_created"></div></div>
                 <div><strong>Tickets Created</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3">
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart3"></canvas></div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart3" height=100></canvas>
+            </div>
             </div>
         </div>
     </div>
@@ -134,39 +128,40 @@
                 <div class="text-value"><div id="reports_created"></div></div>
                 <div><strong>Reports Created</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3" >
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart4"></canvas></div>
-              </div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart4" height=100></canvas>
+            </div>
+            </div>
         </div>
 
         <div class="col-sm-6 col-lg-3">
-              <div class="card text-white bg-warning">
+            <div class="card text-white bg-warning">
             <div class="card-body pb-0">
                   <div class="text-value"><div id="dashboards_created"></div></div>
                   <div><strong>Dashboard Created</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3" >
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart5"></canvas></div>
-              </div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart5" height=100></canvas>
+            </div>
+            </div>
         </div>
 
         <div class="col-sm-6 col-lg-3">
-            <div class="card text-white bg-danger">
+            <div class="card text-white bg-primary">
             <div class="card-body pb-0">
                 <div class="text-value"><div id="recordings_created"></div></div>
                 <div><strong>Recordings Created</strong></div>
             </div>
-            <div class="chart-wrapper mt-3 mx-3" >
-            <div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-                <canvas class="chart chartjs-render-monitor" id="myChart6"></canvas></div>
-              </div>
+            <div class="chart-wrapper mt-3 mx-3" style="height:100px;">
+                <canvas class="chart" id="card-chart6" height=100></canvas>
+            </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
+    </div>
+    </div>
 
+</div>
 
 
 <script>
@@ -191,111 +186,62 @@
     /*****************************************************/
     $(function(){
         let i,x;
-        let mychart = ['myChart1','myChart2','myChart3','myChart4','myChart5','myChart6'];
-
-        for (i = 0; i < 5 ; i++) {
-            x = mychart[i]; 
-            var ctx = document.getElementById(x).getContext("2d");
+        for (i = 0; i < 6 ; i++) {
+            var ctx = document.getElementById("card-chart"+(i+1));
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: label,
+                    labels: labels,
                     datasets: [{
-                        label: "",
-                        pointBorderColor: "",
-                        pointBorderWidth: 1,
-                        pointRadius: 5,
-                        fill: false,
-                        borderWidth: 4,
-                        data: dataset[i]
+                        label: 'Count',
+                        backgroundColor: "transparent",
+                        borderColor: 'rgba(255,255,255,.55)',
+                        data: dataset[i],
                     }]
                 },
                 options: {
+                    maintainAspectRatio: false,
                     legend: {
-                        position: ""
+                        display: false
                     },
                     scales: {
                         yAxes: [{
-                            ticks: {
-                                fontColor: "rgba(0,0,0,0.5)",
-                                fontStyle: "bold",
-                                beginAtZero: 'transparent',
-                                maxTicksLimit: 12,
-                            },
                             display: false,
-                            gridLines: {
+                            ticks: {
                                 display: false
                             }
-                            }],
-                        xAxes: [{
-                            ticks: {
-                                fontColor: "rgba(0,0,0,0.5)",
-                                fontStyle: "bold",
-                                beginAtZero: 'transparent',
-                                maxTicksLimit: 12,
-                            },
-                            display: false,
                         }],
+                        xAxes: [{
+                            gridLines: {
+                                color: 'transparent',
+                                zeroLineColor: 'transparent'
+                            },
+                            ticks: {
+                                fontSize: 2,
+                                fontColor: 'transparent'
+                            }
+                        }],
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 1
+                        },
+                        point: {
+                            radius: 4,
+                            hitRadius: 10,
+                            hoverRadius: 4
+                        }
                     }
                 }
-        
+
             })
         }
-
-        i = 5;
-        x = mychart[i];
-        var ctx = document.getElementById(x).getContext("2d");
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: label,
-                datasets: [{
-                    backgroundColor: getStyle('--primary'),
-                    borderColor: 'rgba(255,255,255,.55)',
-                    data: dataset[i],
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                        display: false,
-					    ticks: {
-                            display: false
-                        }
-                    }],
-                    xAxes: [{
-                        gridLines: {
-                            color: 'transparent',
-                            zeroLineColor: 'transparent'
-                        },
-                        ticks: {
-                            fontSize: 2,
-                            fontColor: 'transparent'
-                        }
-                    }],
-                },
-                elements: {
-                    line: {
-                        borderWidth: 1
-                    },
-                    point: {
-                        radius: 4,
-                        hitRadius: 10,
-                        hoverRadius: 4
-                    }
-                }
-            }
-
-        })
-
     });
 
+    /*
     setTimeout(function(){
         window.location.reload(1);
     }, 50000);
+    */
 </script>
 
