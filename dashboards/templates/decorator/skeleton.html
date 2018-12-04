@@ -1,33 +1,26 @@
 <!DOCTYPE html>
+
+{% load static %}
 <html lang="{% if request.LANGUAGE_CODE %}{{ request.LANGUAGE_CODE }}{% else %}en{% endif %}">
-
 <head>
-    {% load static %}
-    <!-- This meta tag *must* come first in the head; any other head content must come *after* these tag -->
-    <meta charset="utf-8">
-	<!--
-    <meta http-equiv="content-type" content="text/html; charset=utf-8 ;">
-	<meta http-equiv="Content-Security-Policy" content="script-src 'self' maxcdn.bootstrapcdn.com 'unsafe-inline' 'unsafe-eval'; style-src 'self' maxcdn.bootstrapcdn.com">
-	-->
+    <base href="./">
 
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- This meta tag *must* come first in the head; any other head content must come *after* these tag -->
     {% block head-meta %}
     {% include "decorator/header-meta.html" %}
     {% endblock %}
 
-    <title>{% block head-title %} OpsRamp - DevOps Platform {% endblock %}</title>
+    <title>{% block head-title %} OpsRamp - SaaSOPs Platform {% endblock %}</title>
 
     {% block head-css %}
-    <!--  <link rel="stylesheet" href="{% static "dashboard/css/nav.css" %}">  -->
-    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+    <!-- Icons -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'dashboard/css/simple-line-icons.css' %}">
-    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.css' %}">
-    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" type="text/css">  -->
 
-    <!-- Font Awesome icon font -->
-    <link rel="stylesheet" href="{% static 'commons/css/font-awesome.min.css' %}">
-    <!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">  -->
+    <!-- Main styles for this application -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/pace.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/bootstrap.css' %}">
     {% endblock %}
 
 </head>
@@ -59,7 +52,7 @@
 -->
 
 
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app header-fixed sidebar-fixed aside-menu-hidden sidebar-lg-show">
     <!-- Block body header content -->
     {% block body-header %}
     {% include "decorator/header.html" %}
@@ -67,15 +60,14 @@
 
 
     <div class="app-body">
+
         <!-- Block body left menu content -->
         {% block body-leftmenu %}{% endblock %}
         
         <main class="main">
-
         <!-- Block breadcrumb content -->
         <!-- Block body content -->
         {% block body-content %}{% endblock %}
-
         </main>
 
         <!-- Block aside body content, if any -->

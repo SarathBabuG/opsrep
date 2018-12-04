@@ -11,8 +11,6 @@
  */
 '''
 from django.shortcuts import render, render_to_response
-#from django.utils.safestring import mark_safe
-#from django.utils.html import escapejs
 from datetime import date
 import calendar
 
@@ -67,7 +65,7 @@ def resource_stats(request):
 
 
 def page404():
-    return  render_to_response('views/404.html')
+    return render_to_response('views/404.html')
 
 
 def cnsessions(request):
@@ -89,6 +87,9 @@ def cnsessions(request):
     cdata  = []
     count  = 0
     _stats = properties.statsObj.get('1arc', {})
+    if not _stats:
+        return render_to_response('views/no_data.html')
+
     for cn in sorted(_stats.keys()):
         cdata.append({
             "csnode"   : cn.split("-")[0],
@@ -106,7 +107,7 @@ def cnsessions(request):
     if cdata:
         boards.append(cdata)
 
-    return  render(request, 'views/cnsessions.html', { "csn_sessions_data": boards, "agents_data": properties.statsObj.get('1arc', {}) })
+    return render(request, 'views/cnsessions.html', { "csn_sessions_data": boards, "agents_data": properties.statsObj.get('1arc', {}) })
 
 
 def elasticsearch(request):
