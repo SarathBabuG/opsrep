@@ -339,7 +339,7 @@ def get_monthly_usage_stats(month=date.today().month, year=date.today().year):
 
 
 def get_elasticsearch_cluster_info():
-    es_configs = properties.configs[properties.saas_key]["csnodes"]
+    es_configs = properties.configs[properties.saas_key]["elasticsearch"]
     EURL = "http://%s:%s" % (es_configs['nodes'][0], es_configs['port'])
 
     health_data    = json.loads(http_request(EURL + es_configs['health_uri']).decode())    

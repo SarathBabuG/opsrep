@@ -1,121 +1,147 @@
 {% load static %}
 {% load opsrep_utils %}
 
-
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-primary"><div id="es_usage_c_name"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Cluster Name</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-success p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-success"><div id="es_usage_status"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Status</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-info"><div id="es_usage_num_nodes"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Number of Nodes</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-    <div class="w-100"></div>
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-info"><div id="es_usage_num_data_nodes"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Number of Data Nodes</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-info"><div id="es_usage_act_pri_shards"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Active Primary Shards</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-	      <div class="card-body p-3 d-flex align-items-center">
-		      <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
-		      <div>
-			      <strong class="h4"><div class="text-value-sm text-info"><div id="es_usage_act_shards"></div></div></strong>
-                  <div class="text-muted text-uppercase font-weight-bold">Active Shards</div>
-		      </div>
-	      </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-	<div class="card">
-	<div class="card-header text-muted text-center text-uppercase font-weight-bold">INDICES</div>
-	<div class="card-body">
-	<table class="table table-responsive-sm table-striped">
-	<thead>
-		<tr>
-		<th>Name</th>
-		<th>Health</th>
-		<th>Shards</th>
-		<th>Replicas</th>
-		<th>Docs Count</th>
-		<th>Docs Deleted</th>
-		<th>Primaries Size</th>
-		<th>Total Size</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for value in indices_list | load_json %}
-		<tr>
-		<td>{{ value.name }}</td>
-		<td>{{ value.health }}</td>
-		<td>{{ value.shards }}</td>
-		<td>{{ value.replicas }}</td>
-		<td>{{ value.docs_count }}</td>
-		<td>{{ value.docs_deleted }}</td>
-		<td>{{ value.primaries_size }}</td>
-		<td>{{ value.total_size }}</td>
-		</tr>
-		{% endfor %}
-	</tbody>
-	</table>
-	</div>
-	</div>
-
-
 <script>
-
 /* es cluster */
 let es_stats = JSON.parse('{{ es_stats | escapejs }}');
 let indices = JSON.parse('{{ indices | escapejs }}');
 let indices_list = JSON.parse('{{ indices_list | escapejs }}');
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-primary">
+                                <div id="es_usage_c_name"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Cluster Name</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-success p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-success">
+                                <div id="es_usage_status"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Status</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-info">
+                                <div id="es_usage_num_nodes"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Number of Nodes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-100"></div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-info">
+                                <div id="es_usage_num_data_nodes"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Number of Data Nodes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-info">
+                                <div id="es_usage_act_pri_shards"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Active Primary Shards</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body p-3 d-flex align-items-center">
+                    <i class="fa fa-cogs bg-info p-4 font-2xl mr-3"></i>
+                    <div>
+                        <strong class="h4">
+                            <div class="text-value-sm text-info">
+                                <div id="es_usage_act_shards"></div>
+                            </div>
+                        </strong>
+                        <div class="text-muted text-uppercase font-weight-bold">Active Shards</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header text-muted text-center text-uppercase font-weight-bold">INDICES</div>
+    <div class="card-body">
+        <table class="table table-responsive-sm table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Health</th>
+                <th>Shards</th>
+                <th>Replicas</th>
+                <th>Docs Count</th>
+                <th>Docs Deleted</th>
+                <th>Primaries Size</th>
+                <th>Total Size</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for index in indices_list|load_json %}
+            <tr>
+                <td>{{ index.name }}</td>
+                <td>{{ index.health }}</td>
+                <td>{{ index.shards }}</td>
+                <td>{{ index.replicas }}</td>
+                <td>{{ index.docs_count }}</td>
+                <td>{{ index.docs_deleted }}</td>
+                <td>{{ index.primaries_size }}</td>
+                <td>{{ index.total_size }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<script>
 
 console.log(es_stats)
 console.log(indices_list)
@@ -128,8 +154,3 @@ document.getElementById('es_usage_act_pri_shards').innerHTML = es_stats['active.
 document.getElementById('es_usage_act_shards').innerHTML = es_stats['active.shards']
 
 </script>
-
-
-
-</body>
-</html>
