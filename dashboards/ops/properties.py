@@ -16,6 +16,7 @@ import os, json
 configs        = {}
 statsObj       = {}
 orgstats       = {}
+pingdom        = {}
 source_maps    = {
     'ITOM'     : ['PORTAL', 'SELFSIGNED', 'OPENNOCAPI', 'CSV_IMPORT'],
     'IMONSITE' : ['IMONSITE']

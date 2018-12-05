@@ -59,4 +59,3 @@ def http_request(url, headers={}, data=None):
             return urlopen(req).read()
     except Exception:
         raise
-

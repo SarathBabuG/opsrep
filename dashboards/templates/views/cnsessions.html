@@ -34,13 +34,12 @@ rect:hover {  fill:blue; }
 }
 </style>
 
-
-<!--  <script src="http://d3js.org/d3.v3.min.js"></script> -->
-<script src="{% static "d3/d3.min.js" %}"></script> 
+<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+<script src="{% static "d3/d3.min.js" %}"></script>
+<script src="{% static "d3/d3.min.js" %}"></script>
 <script>
 function dashboard(id, fData) {
     //alert(typeof(fData[0].sessions.agent));
-    //var id="#ui-view";
 
     var barColor = 'steelblue';
     function segColor(c){ return {agent:"#807dba", orange:"#e08214",gateway:"#41ab5d"}[c]; }
@@ -78,10 +77,12 @@ function dashboard(id, fData) {
                 .append("g").attr("class", "bar");
         
         //create the rectangles.
+        var rangeBand = 30;
+        //var rangeBand = x.rangeBand();
         bars.append("rect")
             .attr("x", function(d) { return x(d[0]); })
             .attr("y", function(d) { return y(d[1]); })
-            .attr("width", x.rangeBand())
+            .attr("width", rangeBand)
             .attr("height", function(d) { return hGDim.h - y(d[1]); })
             .attr('fill',barColor)
             .on("mouseover",mouseover)// mouseover is defined below.
@@ -89,7 +90,7 @@ function dashboard(id, fData) {
             
         //Create the session labels above the rectangles.
         bars.append("text").text(function(d){ return d3.format(",")(d[1])})
-            .attr("x", function(d) { return x(d[0])+x.rangeBand()/2; })
+            .attr("x", function(d) { return x(d[0])+rangeBand/2; })
             .attr("y", function(d) { return y(d[1])-5; })
             .attr("text-anchor", "middle")
             .attr("class", "x axis");
@@ -138,7 +139,7 @@ function dashboard(id, fData) {
     
     // function to handle pieChart.
     function pieChart(pD){
-        var pC ={},    pieDim ={w:250, h: 250};
+        var pC ={},    pieDim ={w:230, h: 230};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
 
         // create svg for pie chart.
@@ -242,11 +243,18 @@ function dashboard(id, fData) {
         pC = pieChart(tF), // create the pie-chart.
         leg= legend(tF);  // create the legend.
 }
-</script>
 
-{% for csn_sessions in csn_sessions_data %}
-<script>
-    var freqData = {{ csn_sessions | to_json }};
+
+    var freqData = {{ csn_sessions_data | to_json }};
     dashboard('#ui-view', freqData);
 </script>
-{% endfor %}
+
+
+<script>
+    setTimeout(function(){
+        if ($('#cnsessions-link').hasClass('active')) {
+            //window.location.reload(1);
+            loadPage('/cnsessions');
+        }
+    }, 60000);
+</script>

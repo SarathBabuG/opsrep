@@ -42,4 +42,4 @@ urlpatterns = [
     url(r'^page404', views.page404, name='page404'),
 ]
 
-import dashboards.ops.jobs
+import dashboards.ops.scheduler

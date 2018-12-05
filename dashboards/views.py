@@ -98,16 +98,16 @@ def cnsessions(request):
                 "gateway" : int(_stats[cn]["Gateway"])
             }
         })
-        count += 1
-        if count == 10:
-            count = 0
-            boards.append(cdata)
-            cdata = []
+        #count += 1
+        #if count == 10:
+        #    count = 0
+        #    boards.append(cdata)
+        #    cdata = []
 
-    if cdata:
-        boards.append(cdata)
+    #if cdata:
+    #    boards.append(cdata)
 
-    return render(request, 'views/cnsessions.html', { "csn_sessions_data": boards, "agents_data": properties.statsObj.get('1arc', {}) })
+    return render(request, 'views/cnsessions.html', { "csn_sessions_data": cdata, "agents_data": properties.statsObj.get('1arc', {}) })
 
 
 def elasticsearch(request):
