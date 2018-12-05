@@ -237,17 +237,17 @@ def pod_product_stats():
             'dataset'  : [{
                 'label': 'Active',
                 'data' : active_values,
-                'backgroundColor': 'rgba(151, 187, 205, 0.5)',
-                'borderColor': 'rgba(151, 187, 205, 0.8)',
-                'highlightFill': 'rgba(151, 187, 205, 0.75)',
-                'highlightStroke': 'rgba(151, 187, 205, 1)',
+                'backgroundColor': 'rgba(107, 142, 35, 0.5)',
+                'borderColor': 'rgba(107, 142, 35, 0.8)',
+                'highlightFill': 'rgba(107, 142, 35, 0.75)',
+                'highlightStroke': 'rgba(107, 142, 35, 1)',
             },{
                 'label': 'Inactive',
                 'data' : inactive_values,
-                'backgroundColor': 'rgba(220, 220, 220, 0.5)',
-                'borderColor': 'rgba(220, 220, 220, 0.8)',
-                'highlightFill': 'rgba(220, 220, 220, 0.75)',
-                'highlightStroke': 'rgba(220, 220, 220, 1)',
+                'backgroundColor': 'rgba(213, 84, 84, 0.5)',
+                'borderColor': 'rgba(213, 84, 84, 0.8)',
+                'highlightFill': 'rgba(213, 84, 84, 0.75)',
+                'highlightStroke': 'rgba(213, 84, 84, 1)',
             }]
 
         })
