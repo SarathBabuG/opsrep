@@ -1,4 +1,9 @@
 {
+    "pingdom": {
+        "app-key"  : "cGFzc3dvcmQ=",
+        "email"    : "user",
+        "password" : "cGFzc3dvcmQ="
+    },
     "1arc": {
         "mysql": {
             "host"     : "db-slave-ip",
