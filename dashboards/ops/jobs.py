@@ -174,7 +174,7 @@ def get_pingdom_status():
 
 
     ''' Check API Request '''
-    response = http_request(checks_url, headers=headers)
+    response = http_request(checks_url, headers=headers).decode()
     pdata = json.loads(response)
     all_checks = {}
     for check in pdata['checks']:
@@ -191,7 +191,7 @@ def get_pingdom_status():
 
         ''' Week Summary API Request for each Check '''
         surl = summary_url % (check_id)
-        response = http_request(surl, headers=headers)
+        response = http_request(surl, headers=headers).decode()
         sdata = json.loads(response)
 
         total_uptime = 0

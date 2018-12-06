@@ -50,7 +50,7 @@ def http_request(url, headers={}, data=None):
         http_headers.update(headers)
         req = Request(url, data, http_headers)
         python_version = sys.version_info
-        if sys.version_info >= (3,4,3):
+        if sys.version_info >= (3,7,0):
             return urlopen(req, context=allow_tls_only_context(), timeout=30).read()
             #return urlopen(req, context=disable_cert_check_context(), timeout=30).read()
         elif python_version >= (2,6):
