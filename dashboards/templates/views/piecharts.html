@@ -1,0 +1,81 @@
+{% load static %}
+{% load opsrep_utils %}
+
+<script>
+	//var requireJS = [];
+	//loadJS(requireJS, "{% static "dashboard/js/views/charts.js" %}");
+	
+	//jQuery.parseJSON
+	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
+	var options   = JSON.parse('{{ options | escapejs }}');
+	var labels    = JSON.parse('{{ labels | escapejs }}');
+
+	var ctx = null;
+	var chart = null;
+	for (var i = 0; i < dataset_array.length; i++) {
+		options['title']['text'] = dataset_array[i]["name"];
+
+		ctx = document.getElementById("canvas-"+(i+1));
+		chart = new Chart(ctx, {
+			config: {
+		        plugins: {
+		            p1: false   // disable cancellable plugins using id for this instance
+		        }
+		    },
+		    type: "{{ chart_type }}",
+		    options: options,
+		    
+		    data: { labels: labels,  datasets: [ dataset_array[i]["dataset"] ] },
+		});
+	}
+
+</script>
+
+
+<div class="animated fadeIn">
+	
+	<div class="row">
+		<div class="form-group col-sm-2">
+			<select class="form-control" id="ccmonth">
+				{% for mm, mname in months.items %}
+				<option value={{ mm }} {% if mm == month %}selected="selected"{% endif %}>{{ mname }}</option>
+			    {% endfor %}
+			</select>
+		</div>
+		<div class="form-group col-sm-2">
+			<select class="form-control" id="ccyear">
+				{% for yy in years %}
+				<option value={{ yy }} {% if yy == year %}selected="selected"{% endif %}>{{ yy }}</option>
+			    {% endfor %}
+			</select>
+		</div>
+
+		<div class="form-actions">
+          <button class="btn btn-primary" type="button" onclick="loadPage2();">Go!</button>
+        </div>
+	</div>
+
+
+	<!--  <div class="animated fadeIn"> -->
+	<div class="card-columns cols-3">
+	{% for dset in data_sets|load_json %}
+	<div class="card">
+		<div class="chart-wrapper">
+        <canvas id="canvas-{{ forloop.counter }}"></canvas>
+        </div>
+    </div>
+	{% endfor %}
+	</div>
+
+</div>
+
+
+{% block body-javascript %}
+<script>
+function loadPage2(){
+	var ccmonth = document.getElementById("ccmonth").value;
+	var ccyear = document.getElementById("ccyear").value;
+	loadPage('/dashboard?year='+ccyear+'&month='+ccmonth);
+}
+</script>
+{% endblock %}
