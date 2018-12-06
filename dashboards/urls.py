@@ -34,11 +34,14 @@ urlpatterns = [
     url(r'^$', views.main, name='main'),
 
     url(r'^dashboard', views.dashboard, name='dashboard'),
+    url(r'^piecharts', views.piecharts, name='piecharts'),
     url(r'^charts', views.charts, name='charts'),
     url(r'^productstats', views.product_stats, name='productstats'),
     url(r'^resourcestats', views.resource_stats, name='resourcestats'),
     url(r'^cnsessions', views.cnsessions, name='cnsessions'),
     url(r'^elasticsearch', views.elasticsearch, name='elasticsearch'),
+    url(r'^cassandra', views.cassandra, name='cassandra'),
+    url(r'^redis', views.redis, name='redis'),
     url(r'^page404', views.page404, name='page404'),
 ]
 

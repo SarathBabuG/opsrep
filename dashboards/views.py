@@ -27,6 +27,19 @@ def main(request):
 
 
 def dashboard(request):
+    if not properties.pingdom:
+        pass
+
+    from datetime import datetime, timedelta
+    summary_period = 7
+    last_7dates = []
+    for i in range(summary_period):
+        last_7dates.append((datetime.now() - timedelta(days=(i))).strftime("%b %d"))
+    last_7dates.reverse()
+    return render(request, 'views/dashboard.html', {'pingdom_stats': properties.pingdom, 'last_7dates': last_7dates})
+
+
+def piecharts(request):
     formdata = request.GET.dict()
     month = int(formdata.get('month', date.today().month))
     year  = int(formdata.get('year', date.today().year))
@@ -48,7 +61,7 @@ def dashboard(request):
      
     context.update({'data': str(_hash) })
     context.update({'month': month, 'year': year, 'months': months, 'years': [2017, 2018, 2019]})
-    return render(request, 'views/dashboard.html', context)
+    return render(request, 'views/piecharts.html', context)
 
 
 def charts(request):
@@ -113,3 +126,12 @@ def cnsessions(request):
 def elasticsearch(request):
     context = manager.get_elasticsearch_cluster_info()
     return render(request, 'views/elasticsearch.html', context)
+
+
+def cassandra(request):
+    return render_to_response('views/no_data.html')
+
+
+def redis(request):
+    return render_to_response('views/no_data.html')
+

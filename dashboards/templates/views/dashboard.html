@@ -1,81 +1,79 @@
 {% load static %}
-{% load opsrep_utils %}
-
-<script>
-	//var requireJS = [];
-	//loadJS(requireJS, "{% static "dashboard/js/views/charts.js" %}");
-	
-	//jQuery.parseJSON
-	var dataset_array = JSON.parse('{{ data_sets | escapejs }}');
-	var options   = JSON.parse('{{ options | escapejs }}');
-	var labels    = JSON.parse('{{ labels | escapejs }}');
-
-	var ctx = null;
-	var chart = null;
-	for (var i = 0; i < dataset_array.length; i++) {
-		options['title']['text'] = dataset_array[i]["name"];
-
-		ctx = document.getElementById("canvas-"+(i+1));
-		chart = new Chart(ctx, {
-			config: {
-		        plugins: {
-		            p1: false   // disable cancellable plugins using id for this instance
-		        }
-		    },
-		    type: "{{ chart_type }}",
-		    options: options,
-		    
-		    data: { labels: labels,  datasets: [ dataset_array[i]["dataset"] ] },
-		});
-	}
-
-</script>
-
 
 <div class="animated fadeIn">
-	
-	<div class="row">
-		<div class="form-group col-sm-2">
-			<select class="form-control" id="ccmonth">
-				{% for mm, mname in months.items %}
-				<option value={{ mm }} {% if mm == month %}selected="selected"{% endif %}>{{ mname }}</option>
-			    {% endfor %}
-			</select>
-		</div>
-		<div class="form-group col-sm-2">
-			<select class="form-control" id="ccyear">
-				{% for yy in years %}
-				<option value={{ yy }} {% if yy == year %}selected="selected"{% endif %}>{{ yy }}</option>
-			    {% endfor %}
-			</select>
-		</div>
-
-		<div class="form-actions">
-          <button class="btn btn-primary" type="button" onclick="loadPage2();">Go!</button>
-        </div>
-	</div>
-
-
-	<!--  <div class="animated fadeIn"> -->
-	<div class="card-columns cols-3">
-	{% for dset in data_sets|load_json %}
 	<div class="card">
-		<div class="chart-wrapper">
-        <canvas id="canvas-{{ forloop.counter }}"></canvas>
-        </div>
-    </div>
-	{% endfor %}
+		<div class="card-header text-muted font-weight-bold">
+			<div>
+				Availability
+				<div class="float-right">
+					<i class="fa fa-check-circle" style="font-size:24px;color:#6B8E23" data-toggle="tooltip" data-placement="top" title="99.90% uptime or better (less than 2m of downtime)"></i>
+					<small class="text-muted mt-1">Service is operating normally</small>
+					<i class="fa fa-exclamation-circle" style="font-size:24px;color:#FFBD33" data-toggle="tooltip" data-placement="top" title="99.89–98.00% uptime (between 2m and 29m of downtime)"></i>
+					<small class="text-muted mt-1">Service disruption</small>
+					<i class="fa fa-times-circle" style="font-size:24px;color:#FF5733" data-toggle="tooltip" data-placement="top" title="Less than 98.00% uptime (more than 29 minutes of downtime)"></i>
+					<small class="text-muted mt-1">Service outage</small>
+					<i class="fa fa-question-circle" style="font-size:24px;color:#A8ABA7" data-toggle="tooltip" data-placement="top" title="Unmonitored"></i>
+					<small class="text-muted mt-1">No data available</small>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<table class="table table-sm table-striped">
+				<thead class="text-muted">
+				<tr>
+					<th><div>Name</div></th>
+					<th><div>Latest</div><div>resp.time</div></th>
+					<th><div>Avg.resp.time</div><div>last 7 days</div></th>
+					<th><div>Uptime</div><div> last 7 days</div></th>
+					<th><div>Downtime</div><div> last 7 days</div></th>
+					{% for date in last_7dates %}
+					<th>{{ date }}</th>
+					{% endfor %}
+				</tr>
+				</thead>
+				<tbody>
+				{% for server, stats in pingdom_stats.items %}
+				<tr>
+					<td class="text-muted">
+						{% if stats.status == 'up' %}
+						<i class="fa fa-arrow-circle-up" style="font-size:24px;color:#6B8E23" data-toggle="tooltip" data-placement="top" title="Current status: Up"></i>
+						{% else %}
+						<i class="fa fa-times-circle" style="font-size:24px;color:#FF5733" data-toggle="tooltip" data-placement="top" title="Current status: Down"></i>
+						{% endif %}
+						<strong>{{ server }}</strong>
+					</td>
+					<td>
+						{{ stats.lastresponsetime }} ms
+					</td>
+					<td>
+						{{ stats.avg_responsetime_7d }} ms
+					</td>
+					<td>
+						{{ stats.uptime_7days }} %
+					</td>
+					<td>
+						{{ stats.downtime_7days }}
+					</td>
+					{% for info in stats.summary %}
+					<td>
+						{% if info.0 == 'up' %}
+						<i class="fa fa-check-circle" style="font-size:24px;color:#6B8E23" data-toggle="tooltip" data-placement="top" title="Avg.resp.time: {{ info.1 }} ms, Uptime: {{ info.2 }} %"></i>
+						{% elif info.0 == 'disruption' %}
+						<i class="fa fa-exclamation-circle" style="font-size:24px;color:#FFBD33" data-toggle="tooltip" data-placement="top" title="Avg.resp.time: {{ info.1 }} ms, Uptime: {{ info.2 }} %"></i>
+						{% elif info.0 == 'down' %}
+						<i class="fa fa-times-circle" style="font-size:24px;color:#FF5733" data-toggle="tooltip" data-placement="top" title="Avg.resp.time: {{ info.1 }} ms, Uptime: {{ info.2 }} %"></i>
+						{% else %}
+						<i class="fa fa-question-circle" style="font-size:24px;color:#A8ABA7" data-toggle="tooltip" data-placement="top" title="No data available"></i>
+						{% endif %}
+					</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
-
 </div>
 
 
-{% block body-javascript %}
-<script>
-function loadPage2(){
-	var ccmonth = document.getElementById("ccmonth").value;
-	var ccyear = document.getElementById("ccyear").value;
-	loadPage('/dashboard?year='+ccyear+'&month='+ccmonth);
-}
-</script>
-{% endblock %}
+<script src="{% static 'dashboard/js/tooltips.js' %}"></script>

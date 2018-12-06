@@ -32,7 +32,7 @@ schedObj.add_job(get_cn_agent_counts, ten_min_trigger, max_instances=1, id='get_
 #schedObj.add_job(get_cn_agent_counts, "interval", minutes=10, next_run_time=(datetime.now() + timedelta(seconds=15)))
 
 hourly_trigger = IntervalTrigger(hours=1, start_date=datetime.now() + timedelta(seconds=15))
-#schedObj.add_job(get_pingdom_status, hourly_trigger, max_instances=1, id='get_pingdom_status', replace_existing=True)
+schedObj.add_job(get_pingdom_status, hourly_trigger, max_instances=1, id='get_pingdom_status', replace_existing=True)
 
 monthly_trigger = CronTrigger(day=1, hour=0, minute=0, start_date=datetime.now() + timedelta(seconds=15))
 #schedObj.add_job(get_product_stats_data, monthly_trigger, max_instances=1, id='get_product_stats_data', replace_existing=True)

@@ -12,11 +12,11 @@
 '''
 
 from dashboards.ops import properties
-from dashboards.ops.utils import http_request
+from dashboards.ops.utils import http_request, display_time
 from dashboards.ops.connection import DBCmd, executeQuery, SQL
 from dashboards.models import Period, Source, ProductStats, MonthlyStats
 from datetime import date, datetime, timedelta
-import base64, json, time
+import base64, json, time, operator
 
 #@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
@@ -185,7 +185,7 @@ def get_pingdom_status():
                 'hostname': check['hostname'],
                 'status': check['status'],
                 'lastresponsetime': check['lastresponsetime'],
-                'lasttesttime': check['lasttesttime']
+                'lasttesttime': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(check['lasttesttime']))
             }
         })
 
@@ -197,27 +197,39 @@ def get_pingdom_status():
         total_uptime = 0
         total_downtime = 0
         total_responsetime = 0
-        all_checks[check_name]['summary'] = {}
+        all_checks[check_name]['summary'] = []
+        temp_hash = {}
         for summary in sdata['summary']['days'][-summary_period:]:
             startdate = time.strftime('%Y-%m-%d', time.gmtime(summary['starttime']))
-            all_checks[check_name]['summary'].update({
-                startdate: {
-                    "avgresponse" : summary['avgresponse'],
-                    "downtime"    : summary['downtime'],
-                    "uptime"      : summary['uptime']
-                }
-            })
-
             total_uptime += summary['uptime']
             total_downtime += summary['downtime']
             total_responsetime += summary['avgresponse']
+
+
+            _state = 'up'
+            uptime_prct = round((summary['uptime'] / (summary['downtime'] + summary['uptime'])) * 100, 2)
+            if uptime_prct >= 98 and uptime_prct < 99.90:
+                _state = 'disruption'
+            elif uptime_prct < 98:
+                _state = 'down'
+
+            temp_hash[startdate] = (_state, summary['avgresponse'], uptime_prct)
+
+        for sdate in last_7dates:
+            all_checks[check_name]['summary'].append(temp_hash.get(sdate, ('unknown', 0, 0)))
 
         avg_responsetime_7d = int(total_responsetime / len(all_checks[check_name]['summary']))
         uptime_7days = round((total_uptime / (total_uptime + total_downtime)) * 100, 2)
 
         all_checks[check_name]['avg_responsetime_7d'] = avg_responsetime_7d
         all_checks[check_name]['uptime_7days'] = uptime_7days
+        all_checks[check_name]['downtime_7days'] = 'no outage'
+        if total_downtime > 0:
+            all_checks[check_name]['downtime_7days'] = display_time(total_downtime)
+        del sdata
 
-    properties.pingdom = all_checks
+    properties.pingdom = {k: v for k, v in sorted(all_checks.items(), key=operator.itemgetter(0))}
+    del pdata
     del all_checks
+    del temp_hash
     #return all_checks
