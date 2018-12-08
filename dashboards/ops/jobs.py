@@ -228,7 +228,7 @@ def get_pingdom_status():
             all_checks[check_name]['downtime_7days'] = display_time(total_downtime)
         del sdata
 
-    properties.pingdom = {k: v for k, v in sorted(all_checks.items(), key=operator.itemgetter(0))}
+    properties.pingdom = [{k: v} for k, v in sorted(all_checks.items(), key=operator.itemgetter(0))]
     del pdata
     del all_checks
     del temp_hash

@@ -32,7 +32,8 @@
 				</tr>
 				</thead>
 				<tbody>
-				{% for server, stats in pingdom_stats.items %}
+				{% for pstats in pingdom_stats %}
+				{% for server, stats in pstats %}
 				<tr>
 					<td class="text-muted">
 						{% if stats.status == 'up' %}
@@ -68,6 +69,7 @@
 					</td>
 					{% endfor %}
 				</tr>
+				{% endfor %}
 				{% endfor %}
 				</tbody>
 			</table>
