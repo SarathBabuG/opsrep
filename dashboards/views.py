@@ -14,6 +14,7 @@ from django.shortcuts import render, render_to_response
 from datetime import date
 import calendar
 
+from dashboards.ops.utils import get_last_ndates
 from dashboards.ops import manager, properties
 from .models import ProductStats
 
@@ -30,11 +31,9 @@ def dashboard(request):
     if not properties.pingdom:
         pass
 
-    from datetime import datetime, timedelta
+    tz = 'US/Pacific'
     summary_period = 7
-    last_7dates = []
-    for i in range(summary_period):
-        last_7dates.append((datetime.now() - timedelta(days=(i))).strftime("%b %d"))
+    last_7dates = get_last_ndates(summary_period, tz, '%b %d')
     last_7dates.reverse()
     return render(request, 'views/dashboard.html', {'pingdom_stats': properties.pingdom, 'last_7dates': last_7dates})
 
@@ -77,8 +76,13 @@ def resource_stats(request):
     return render(request, 'views/resource_stats.html', context)
 
 
-def page404():
-    return render_to_response('views/404.html')
+def page404(request):
+    tz = 'US/Pacific'
+    summary_period = 7
+    last_7dates = get_last_ndates(summary_period, tz, '%b %d')
+    last_7dates.reverse()
+    return render(request, 'views/404.html', {'pingdom_stats': properties.pingdom, 'last_7dates': last_7dates})
+    #return render_to_response('views/404.html')
 
 
 def cnsessions(request):

@@ -12,11 +12,11 @@
 '''
 
 from dashboards.ops import properties
-from dashboards.ops.utils import http_request, display_time
+from dashboards.ops.utils import http_request, display_time, epoch_to_tztime_convertor, get_last_ndates
 from dashboards.ops.connection import DBCmd, executeQuery, SQL
 from dashboards.models import Period, Source, ProductStats, MonthlyStats
-from datetime import date, datetime, timedelta
-import base64, json, time, operator
+from datetime import date, datetime
+import base64, json, operator
 
 #@schedObj.scheduled_job("interval", minutes=15, id="get_cn_agent_counts", next_run_time=(datetime.now() + timedelta(seconds=15)))
 def get_cn_agent_counts():
@@ -167,9 +167,8 @@ def get_pingdom_status():
     summary_period = 7
 
     ''' Week Dates '''
-    last_7dates = []
-    for i in range(summary_period):
-        last_7dates.append((datetime.now() - timedelta(days=(i))).strftime("%Y-%m-%d"))
+    tz = 'US/Pacific'
+    last_7dates = get_last_ndates(summary_period, tz, '%Y-%m-%d')
     last_7dates = sorted(last_7dates)
 
 
@@ -180,12 +179,14 @@ def get_pingdom_status():
     for check in pdata['checks']:
         check_id = check['id']
         check_name = check['name']
+        if check_name.startswith('DNS'):
+            continue
         all_checks.update({
             check['name']: {
                 'hostname': check['hostname'],
                 'status': check['status'],
                 'lastresponsetime': check['lastresponsetime'],
-                'lasttesttime': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(check['lasttesttime']))
+                'lasttesttime': epoch_to_tztime_convertor(check['lasttesttime'], tz, '%Y-%m-%d %H:%M:%S')
             }
         })
 
@@ -200,7 +201,7 @@ def get_pingdom_status():
         all_checks[check_name]['summary'] = []
         temp_hash = {}
         for summary in sdata['summary']['days'][-summary_period:]:
-            startdate = time.strftime('%Y-%m-%d', time.gmtime(summary['starttime']))
+            startdate = epoch_to_tztime_convertor(summary['starttime'], tz, '%Y-%m-%d')
             total_uptime += summary['uptime']
             total_downtime += summary['downtime']
             total_responsetime += summary['avgresponse']

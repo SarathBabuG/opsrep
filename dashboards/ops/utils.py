@@ -11,6 +11,8 @@
  */
 '''
 from urllib.request import urlopen, Request
+from datetime import datetime, timedelta
+from pytz import timezone
 import sys
 
 
@@ -50,7 +52,7 @@ def http_request(url, headers={}, data=None):
         http_headers.update(headers)
         req = Request(url, data, http_headers)
         python_version = sys.version_info
-        if sys.version_info >= (3,7,0):
+        if sys.version_info >= (2,7,0):
             return urlopen(req, context=allow_tls_only_context(), timeout=30).read()
             #return urlopen(req, context=disable_cert_check_context(), timeout=30).read()
         elif python_version >= (2,6):
@@ -76,3 +78,24 @@ def display_time(seconds, granularity=2):
                 name = name.rstrip('s')
             result.append("{} {}".format(value, name))
     return ' '.join(result[:granularity])
+
+
+
+def epoch_to_tztime_convertor(eseconds, tz=None, sformat=None):
+    date = datetime.utcfromtimestamp(eseconds)
+    if tz:
+        if sformat:
+            return date.astimezone(timezone(tz)).strftime(sformat)
+        return date.astimezone(timezone(tz))
+
+    if sformat:
+        return date.strftime(sformat)
+    return date
+
+
+def get_last_ndates(period, tz=None, sformat=None):
+    last_ndates = []
+    for i in range(period):
+        _eseconds = (datetime.utcnow() - timedelta(days=(i))).timestamp()
+        last_ndates.append(epoch_to_tztime_convertor(_eseconds, tz, sformat))
+    return last_ndates
