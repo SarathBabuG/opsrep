@@ -12,7 +12,7 @@
 '''
 from urllib.request import urlopen, Request
 from datetime import datetime, timedelta
-from pytz import timezone
+import pytz
 import sys
 
 
@@ -82,11 +82,11 @@ def display_time(seconds, granularity=2):
 
 
 def epoch_to_tztime_convertor(eseconds, tz=None, sformat=None):
-    date = datetime.utcfromtimestamp(eseconds)
+    date = datetime.utcfromtimestamp(eseconds).replace(tzinfo=pytz.utc)
     if tz:
         if sformat:
-            return date.astimezone(timezone(tz)).strftime(sformat)
-        return date.astimezone(timezone(tz))
+            return date.astimezone(pytz.timezone(tz)).strftime(sformat)
+        return date.astimezone(pytz.timezone(tz))
 
     if sformat:
         return date.strftime(sformat)

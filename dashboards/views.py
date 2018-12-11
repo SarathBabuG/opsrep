@@ -77,12 +77,7 @@ def resource_stats(request):
 
 
 def page404(request):
-    tz = 'US/Pacific'
-    summary_period = 7
-    last_7dates = get_last_ndates(summary_period, tz, '%b %d')
-    last_7dates.reverse()
-    return render(request, 'views/404.html', {'pingdom_stats': properties.pingdom, 'last_7dates': last_7dates})
-    #return render_to_response('views/404.html')
+    return render_to_response('views/404.html')
 
 
 def cnsessions(request):
